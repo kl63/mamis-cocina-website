@@ -3,12 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-
-// Use service role key for server-side operations (bypasses RLS)
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -19,6 +13,12 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('🔄 Server-side updating order status:', orderId, 'to', newStatus)
+
+    // Use service role key for server-side operations (bypasses RLS)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
 
     const { data, error } = await supabase
       .from('orders')
