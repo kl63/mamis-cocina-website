@@ -560,3 +560,90 @@ export async function getPeakHours() {
     return []
   }
 }
+
+// ==================== INVENTORY MANAGEMENT ====================
+
+export interface InventoryItem {
+  id: string
+  menu_item_id: string
+  quantity: number
+  low_stock_threshold: number
+  last_restocked_at: string
+  created_at: string
+  updated_at: string
+  menu_item?: MenuItem
+}
+
+export async function getAllInventory() {
+  try {
+    const { data, error } = await supabase
+      .from('inventory')
+      .select(`
+        *,
+        menu_item:menu_items(*)
+      `)
+      .order('quantity', { ascending: true })
+
+    if (error) throw error
+    return data as InventoryItem[]
+  } catch (error) {
+    console.error('Error fetching inventory:', error)
+    return []
+  }
+}
+
+export async function updateInventoryQuantity(menuItemId: string, quantity: number) {
+  try {
+    const { data, error} = await supabase
+      .from('inventory')
+      .update({ 
+        quantity,
+        last_restocked_at: new Date().toISOString()
+      })
+      .eq('menu_item_id', menuItemId)
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error updating inventory:', error)
+    return { data: null, error }
+  }
+}
+
+export async function updateLowStockThreshold(menuItemId: string, threshold: number) {
+  try {
+    const { data, error } = await supabase
+      .from('inventory')
+      .update({ low_stock_threshold: threshold })
+      .eq('menu_item_id', menuItemId)
+      .select()
+      .single()
+
+    if (error) throw error
+    return { data, error: null }
+  } catch (error) {
+    console.error('Error updating low stock threshold:', error)
+    return { data: null, error }
+  }
+}
+
+export async function getLowStockItems() {
+  try {
+    const { data, error } = await supabase
+      .from('inventory')
+      .select(`
+        *,
+        menu_item:menu_items(*)
+      `)
+      .filter('quantity', 'lte', supabase.rpc('low_stock_threshold'))
+      .order('quantity', { ascending: true })
+
+    if (error) throw error
+    return data as InventoryItem[]
+  } catch (error) {
+    console.error('Error fetching low stock items:', error)
+    return []
+  }
+}
