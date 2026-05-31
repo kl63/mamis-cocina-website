@@ -44,7 +44,7 @@ export default function KioskPage() {
   // Redirect if not authenticated or not admin
   useEffect(() => {
     if (!authLoading && (!user || !isAdmin)) {
-      router.push('/login')
+      router.push('/login?redirect=/kiosk')
     }
   }, [user, isAdmin, authLoading, router])
 

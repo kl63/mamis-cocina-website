@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Mail, Lock, Eye, EyeOff, Flame, User } from 'lucide-react'
 import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -17,16 +17,18 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  
+
   const { signIn, signUp, user } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect') || '/'
 
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      router.push('/')
+      router.push(redirect)
     }
-  }, [user, router])
+  }, [user, router, redirect])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,7 +44,7 @@ export default function LoginPage() {
           setError(error.message)
         } else {
           setSuccess('Logged in successfully!')
-          setTimeout(() => router.push('/'), 1000)
+          setTimeout(() => router.push(redirect), 1000)
         }
       } else {
         // Sign up
