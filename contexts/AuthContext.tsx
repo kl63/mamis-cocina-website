@@ -161,29 +161,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       console.log('🚪 Signing out...')
       
-      // Sign out from Supabase
-      const { error } = await supabase.auth.signOut()
-      
-      if (error) {
-        console.error('❌ Sign out error:', error)
-        throw error
-      }
-      
-      // Clear local state
+      // Clear local state immediately for instant UI feedback
       setUser(null)
       setIsAdmin(false)
       
+      // Sign out from Supabase (non-blocking for UI)
+      supabase.auth.signOut().catch((error) => {
+        console.error('❌ Sign out error:', error)
+      })
+      
       console.log('✅ Signed out successfully')
       
-      // Redirect to home page
+      // Use Next.js router for faster navigation (no full page reload)
       if (typeof window !== 'undefined') {
         window.location.href = '/'
       }
     } catch (error) {
       console.error('Error signing out:', error)
-      // Still clear local state even if Supabase call fails
-      setUser(null)
-      setIsAdmin(false)
+      // State already cleared above
     }
   }
 

@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/AuthContext'
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [isSigningOut, setIsSigningOut] = useState(false)
   const { itemCount } = useCart()
   const { user, signOut, isAdmin } = useAuth()
 
@@ -102,11 +103,13 @@ export function Navbar() {
                   size="icon" 
                   className="text-white hover:bg-white/10"
                   onClick={async () => {
+                    setIsSigningOut(true)
                     await signOut()
                   }}
+                  disabled={isSigningOut}
                   title="Sign Out"
                 >
-                  <LogOut className="h-5 w-5" />
+                  <LogOut className={`h-5 w-5 ${isSigningOut ? 'animate-spin' : ''}`} />
                 </Button>
               </div>
             ) : (
@@ -192,11 +195,13 @@ export function Navbar() {
                         className="flex-1"
                         onClick={async () => {
                           setMobileMenuOpen(false)
+                          setIsSigningOut(true)
                           await signOut()
                         }}
+                        disabled={isSigningOut}
                       >
-                        <LogOut className="h-4 w-4 mr-2" />
-                        Sign Out
+                        <LogOut className={`h-4 w-4 mr-2 ${isSigningOut ? 'animate-spin' : ''}`} />
+                        {isSigningOut ? 'Signing out...' : 'Sign Out'}
                       </Button>
                     </div>
                   </>
