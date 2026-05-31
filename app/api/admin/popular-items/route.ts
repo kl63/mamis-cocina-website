@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
     
     // Aggregate by menu item
     const itemStats: Record<string, { name: string; quantity: number; revenue: number }> = {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     orderItems.forEach((item: any) => {
       const itemId = item.menu_item_id
       const name = item.menu_items?.name || 'Unknown'

@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
     
     // Group by date
     const revenueByDate: Record<string, number> = {}
-    orders.forEach((order: any) => {
+    orders.forEach((order: { created_at: string; total_amount: string }) => {
       const date = new Date(order.created_at).toLocaleDateString()
       revenueByDate[date] = (revenueByDate[date] || 0) + parseFloat(order.total_amount)
     })

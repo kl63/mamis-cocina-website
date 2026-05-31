@@ -238,6 +238,7 @@ export default function KitchenDisplayPage() {
     } catch (error) {
       console.error('Error setting up realtime subscription:', error)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isAdmin])
 
   // Show loading state while checking auth

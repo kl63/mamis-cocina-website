@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -20,7 +20,7 @@ export async function GET() {
     
     // Aggregate by hour
     const hourStats: Record<number, number> = {}
-    orders.forEach((order: any) => {
+    orders.forEach((order: { created_at: string }) => {
       const hour = new Date(order.created_at).getHours()
       hourStats[hour] = (hourStats[hour] || 0) + 1
     })
