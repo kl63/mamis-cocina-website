@@ -157,6 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             full_name: fullName,
             role: 'customer', // Default role
           },
+          emailRedirectTo: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
         },
       })
 
