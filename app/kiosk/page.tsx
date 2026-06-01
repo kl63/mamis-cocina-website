@@ -12,7 +12,7 @@ export default function KioskDisabled() {
           Kiosk Mode Disabled
         </h1>
         <p className="text-gray-400 mb-8">
-          This feature is not available for Mami's Cocina.
+          This feature is not available for Mami&apos;s Cocina.
         </p>
         <Button asChild className="bg-gradient-to-r from-red-500 to-yellow-600">
           <Link href="/">
