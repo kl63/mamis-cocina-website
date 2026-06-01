@@ -119,7 +119,7 @@ export default function Home() {
             >
               Authentic tacos made with love, served with tradition.
               <br />
-              <span className="text-red-400 font-bold">¡Bienvenidos a Mami's Cocina!</span>
+              <span className="text-red-400 font-bold">¡Bienvenidos a Mami&apos;s Cocina!</span>
             </motion.p>
 
             <motion.div
@@ -283,7 +283,7 @@ export default function Home() {
           >
             <h2 className="text-4xl md:text-6xl font-black">
               <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
-                Why Choose Mami's Cocina?
+                Why Choose Mami&apos;s Cocina?
               </span>
             </h2>
             <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">

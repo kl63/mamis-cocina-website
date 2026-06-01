@@ -111,10 +111,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = async (
     menuItem: MenuItem,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     quantity: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     customizations: Record<string, string>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     selectedToppings: string[],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     selectedSauces: string[],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     itemPrice: number
   ) => {
     // Cart functionality disabled for Mami's Cocina

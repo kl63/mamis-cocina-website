@@ -107,7 +107,7 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-6 text-lg text-gray-300">
                 <p>
-                  Mami's Cocina began in Mami's kitchen, where traditional Mexican recipes were passed down through 
+                  Mami&apos;s Cocina began in Mami&apos;s kitchen, where traditional Mexican recipes were passed down through 
                   generations. What started as family gatherings filled with authentic tacos, homemade salsas, and 
                   laughter has grown into a beloved community restaurant.
                 </p>
@@ -117,7 +117,7 @@ export default function AboutPage() {
                   to bringing the warmth of Mexican hospitality to every customer.
                 </p>
                 <p>
-                  Today, we&apos;re proud to share Mami's legacy with our community, serving authentic Mexican cuisine 
+                  Today, we&apos;re proud to share Mami&apos;s legacy with our community, serving authentic Mexican cuisine 
                   that tastes like home. Each dish tells a story of tradition, family, and the vibrant flavors of Mexico.
                 </p>
               </div>
@@ -241,7 +241,7 @@ export default function AboutPage() {
             <p className="text-xl md:text-2xl text-white/95 leading-relaxed">
               To share the authentic flavors and warmth of Mexican tradition with our community. 
               Every taco we make, every salsa we prepare, and every customer we serve is welcomed 
-              like family. ¡Bienvenidos a Mami's Cocina!
+              like family. ¡Bienvenidos a Mami&apos;s Cocina!
             </p>
           </motion.div>
         </div>

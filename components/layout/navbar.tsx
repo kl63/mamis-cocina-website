@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext'
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [mounted, setMounted] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const { itemCount } = useCart()

@@ -13,8 +13,7 @@ import {
   TrendingUp,
   Package,
   Loader2,
-  Clock,
-  ChefHat
+  Clock
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'

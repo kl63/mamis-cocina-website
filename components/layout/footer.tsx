@@ -133,7 +133,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-border/40">
           <p className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Mami's Cocina. All rights reserved.
+            © {new Date().getFullYear()} Mami&apos;s Cocina. All rights reserved.
           </p>
         </div>
       </div>
