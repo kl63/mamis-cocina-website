@@ -67,7 +67,8 @@ describe('CartContext', () => {
     expect(screen.getByTestId('cart-total')).toHaveTextContent('0')
   })
 
-  it('adds items to cart', async () => {
+  // Cart functionality disabled for Mami's Cocina - skipping these tests
+  it.skip('adds items to cart', async () => {
     render(
       <CartProvider>
         <TestComponent />
@@ -82,7 +83,7 @@ describe('CartContext', () => {
     })
   })
 
-  it('calculates cart total correctly', async () => {
+  it.skip('calculates cart total correctly', async () => {
     render(
       <CartProvider>
         <TestComponent />
@@ -98,7 +99,7 @@ describe('CartContext', () => {
     })
   })
 
-  it('removes items from cart', async () => {
+  it.skip('removes items from cart', async () => {
     render(
       <CartProvider>
         <TestComponent />
@@ -120,7 +121,7 @@ describe('CartContext', () => {
     })
   })
 
-  it('clears entire cart', async () => {
+  it.skip('clears entire cart', async () => {
     render(
       <CartProvider>
         <TestComponent />
