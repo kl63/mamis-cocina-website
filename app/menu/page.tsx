@@ -189,7 +189,7 @@ export default function MenuPage() {
                     
                     {/* Image Area */}
                     <div className="relative h-56 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
-                      {item.image_url && (item.image_url.startsWith('http') || item.image_url.startsWith('/')) ? (
+                      {item.image_url ? (
                         <motion.img
                           whileHover={{ scale: 1.1 }}
                           transition={{ duration: 0.4 }}
@@ -207,7 +207,7 @@ export default function MenuPage() {
                           transition={{ duration: 0.4 }}
                           className="text-8xl filter drop-shadow-2xl"
                         >
-                          {item.image_url || categoryEmojis[item.category?.name || 'Burgers'] || '🍔'}
+                          {categoryEmojis[item.category?.name || 'Tacos'] || '�'}
                         </motion.div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />

@@ -11,10 +11,12 @@ import type { MenuItem } from '@/types'
 
 // Emoji mapping for categories
 const categoryEmojis: Record<string, string> = {
-  'Burgers': '🍔',
-  'Sides': '🍟',
+  'Tacos': '🌮',
+  'Burritos': '�',
+  'Quesadillas': '🧀',
+  'Sides': '🫔',
   'Drinks': '🥤',
-  'Desserts': '🍰',
+  'Desserts': '�',
 }
 
 export default function Home() {
@@ -51,8 +53,8 @@ export default function Home() {
         {/* Background Burger Image */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=1920&h=1080&fit=crop&q=80"
-            alt="Juicy burger background"
+            src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=1920&h=1080&fit=crop&q=80"
+            alt="Delicious tacos background"
             fill
             className="object-cover opacity-50"
             priority
@@ -100,12 +102,12 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-tight mb-8"
             >
-              <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-                Flame-Grilled
+              <span className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-transparent">
+                Authentic
               </span>
               <br />
               <span className="text-white">
-                Perfection
+                Mexican Flavor
               </span>
             </motion.h1>
 
@@ -115,9 +117,9 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-xl md:text-3xl text-gray-300 max-w-3xl mx-auto font-medium mb-12"
             >
-              Premium burgers crafted with passion, delivered with speed.
+              Authentic tacos made with love, served with tradition.
               <br />
-              <span className="text-orange-400 font-bold">Your meal, your way.</span>
+              <span className="text-red-400 font-bold">¡Bienvenidos a Mami's Cocina!</span>
             </motion.p>
 
             <motion.div
@@ -157,12 +159,12 @@ export default function Home() {
             className="text-center mb-16"
           >
             <h2 className="text-5xl md:text-7xl font-black mb-4 text-white">
-              <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
                 Featured Menu
               </span>
             </h2>
             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
-              Handcrafted burgers that&apos;ll blow your mind
+              Authentic Mexican dishes made fresh daily
             </p>
           </motion.div>
 
@@ -193,13 +195,26 @@ export default function Home() {
                     
                     {/* Image Area */}
                     <div className="relative h-64 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
-                      <motion.div
-                        whileHover={{ scale: 1.2, rotate: 5 }}
-                        transition={{ duration: 0.4 }}
-                        className="text-9xl filter drop-shadow-2xl"
-                      >
-                        {item.image_url || categoryEmojis[item.category?.name || 'Burgers'] || '🍔'}
-                      </motion.div>
+                      {item.image_url ? (
+                        <motion.img
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.4 }}
+                          src={item.image_url.includes('unsplash.com') 
+                            ? `${item.image_url.split('?')[0]}?w=800&q=80&auto=format`
+                            : item.image_url
+                          }
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <motion.div
+                          whileHover={{ scale: 1.2, rotate: 5 }}
+                          transition={{ duration: 0.4 }}
+                          className="text-9xl filter drop-shadow-2xl"
+                        >
+                          {categoryEmojis[item.category?.name || 'Tacos'] || '🌮'}
+                        </motion.div>
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                       
                       {/* Flame effects */}
@@ -267,12 +282,12 @@ export default function Home() {
             className="text-center space-y-4 mb-16"
           >
             <h2 className="text-4xl md:text-6xl font-black">
-              <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 bg-clip-text text-transparent">
-                Why Choose ByteBurger?
+              <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
+                Why Choose Mami's Cocina?
               </span>
             </h2>
             <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-              Crafted with passion, served with pride - taste the difference quality makes
+              Traditional recipes passed down through generations - taste authentic Mexico
             </p>
           </motion.div>
 
@@ -280,39 +295,39 @@ export default function Home() {
             {[
               {
                 icon: Flame,
-                title: 'Flame-Grilled',
-                description: 'Every patty is perfectly flame-grilled to juicy perfection',
-                gradient: 'from-orange-500/20 to-red-600/20',
-                border: 'border-orange-500/30',
-                iconColor: 'text-orange-500',
-                shadow: 'hover:shadow-orange-500/20',
+                title: 'Authentic Recipes',
+                description: 'Traditional Mexican recipes passed down from Mami herself',
+                gradient: 'from-red-500/20 to-yellow-600/20',
+                border: 'border-red-500/30',
+                iconColor: 'text-red-500',
+                shadow: 'hover:shadow-red-500/20',
                 delay: 0,
               },
               {
                 icon: Star,
-                title: 'Premium Beef',
-                description: '100% fresh, never frozen, hand-pressed Angus beef patties',
-                gradient: 'from-red-500/20 to-orange-600/20',
-                border: 'border-red-500/30',
-                iconColor: 'text-red-500',
-                shadow: 'hover:shadow-red-500/20',
+                title: 'Fresh Ingredients',
+                description: 'Handmade tortillas and fresh ingredients prepared daily',
+                gradient: 'from-yellow-500/20 to-green-600/20',
+                border: 'border-yellow-500/30',
+                iconColor: 'text-yellow-500',
+                shadow: 'hover:shadow-yellow-500/20',
                 delay: 0.1,
               },
               {
                 icon: Zap,
-                title: 'Bold Flavors',
-                description: 'Signature sauces and seasonings that pack a punch',
-                gradient: 'from-orange-600/20 to-red-500/20',
-                border: 'border-orange-600/30',
-                iconColor: 'text-orange-600',
-                shadow: 'hover:shadow-orange-600/20',
+                title: 'Bold Spices',
+                description: 'Authentic Mexican spices and homemade salsas',
+                gradient: 'from-green-600/20 to-red-500/20',
+                border: 'border-green-600/30',
+                iconColor: 'text-green-600',
+                shadow: 'hover:shadow-green-600/20',
                 delay: 0.2,
               },
               {
                 icon: TrendingUp,
-                title: 'Fresh Daily',
-                description: 'Locally sourced ingredients delivered fresh every morning',
-                gradient: 'from-red-600/20 to-orange-500/20',
+                title: 'Family Tradition',
+                description: 'Serving the community with love since generations',
+                gradient: 'from-red-600/20 to-yellow-500/20',
                 border: 'border-red-600/30',
                 iconColor: 'text-red-600',
                 shadow: 'hover:shadow-red-600/20',
@@ -344,7 +359,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section - SUPER DRAMATIC */}
-      <section className="py-32 bg-gradient-to-br from-orange-600 via-red-600 to-orange-700 relative overflow-hidden">
+      <section className="py-32 bg-gradient-to-br from-red-600 via-yellow-600 to-green-700 relative overflow-hidden">
         {/* Animated pattern background */}
         <div className="absolute inset-0 opacity-20">
           <motion.div
@@ -370,8 +385,8 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-tight"
             >
-              Ready to Ignite <br className="hidden md:block" />
-              Your Taste Buds?
+              ¿Listo Para <br className="hidden md:block" />
+              Sabor Auténtico?
             </motion.h2>
 
             <motion.p
@@ -381,7 +396,7 @@ export default function Home() {
               transition={{ delay: 0.2 }}
               className="text-xl md:text-3xl text-white/95 mb-12 max-w-4xl mx-auto font-medium"
             >
-              Order now and get your first burger delivered in <span className="font-black text-yellow-300">30 minutes</span> or it&apos;s <span className="font-black text-yellow-300">FREE!</span>
+              Order now and taste authentic Mexican cuisine delivered in <span className="font-black text-yellow-300">30 minutes</span> or it&apos;s <span className="font-black text-yellow-300">FREE!</span>
             </motion.p>
 
             <motion.div
@@ -391,7 +406,7 @@ export default function Home() {
               transition={{ delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-6 justify-center items-center"
             >
-              <Button asChild className="bg-white text-orange-600 hover:bg-gray-100 px-12 py-8 text-xl rounded-full shadow-2xl hover:scale-110 transition-all duration-300 font-black">
+              <Button asChild className="bg-white text-red-600 hover:bg-gray-100 px-12 py-8 text-xl rounded-full shadow-2xl hover:scale-110 transition-all duration-300 font-black">
                 <Link href="/menu">
                   <Flame className="mr-3 w-6 h-6" />
                   Order Now
@@ -399,9 +414,9 @@ export default function Home() {
                 </Link>
               </Button>
 
-              <Button asChild variant="outline" className="border-4 border-white text-white hover:bg-white hover:text-orange-600 px-12 py-8 text-xl rounded-full transition-all duration-300 font-black">
+              <Button asChild className="bg-transparent border-4 border-white text-white hover:bg-white hover:text-red-600 px-12 py-8 text-xl rounded-full transition-all duration-300 font-black shadow-2xl">
                 <Link href="/about">
-                  Download App
+                  Our Story
                 </Link>
               </Button>
             </motion.div>
@@ -412,28 +427,28 @@ export default function Home() {
               transition={{ duration: 4, repeat: Infinity }}
               className="absolute top-10 left-20 text-7xl hidden lg:block"
             >
-              🍔
+              �
             </motion.div>
             <motion.div
               animate={{ y: [15, -15, 15], rotate: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, delay: 1 }}
               className="absolute bottom-10 right-20 text-7xl hidden lg:block"
             >
-              🍟
+              �
             </motion.div>
             <motion.div
               animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
               transition={{ duration: 5, repeat: Infinity }}
               className="absolute top-1/2 left-10 text-6xl hidden lg:block"
             >
-              🔥
+              🌶️
             </motion.div>
             <motion.div
               animate={{ scale: [1, 1.2, 1], rotate: [0, -180, -360] }}
               transition={{ duration: 5, repeat: Infinity, delay: 2 }}
               className="absolute top-1/2 right-10 text-6xl hidden lg:block"
             >
-              🔥
+              🌶️
             </motion.div>
           </motion.div>
         </div>

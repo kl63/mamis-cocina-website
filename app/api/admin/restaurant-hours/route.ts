@@ -84,7 +84,7 @@ export async function PUT(request: Request) {
     
     // Use direct fetch with authenticated token
     const roleResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/users?select=role&id=eq.${user.id}`,
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/users?select=is_admin&id=eq.${user.id}`,
       {
         headers: {
           'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -94,17 +94,17 @@ export async function PUT(request: Request) {
     )
 
     const userData = await roleResponse.json()
-    console.log('👮 User role data:', userData)
+    console.log('👮 User admin data:', userData)
 
-    if (!Array.isArray(userData) || userData.length === 0 || userData[0].role !== 'admin') {
+    if (!Array.isArray(userData) || userData.length === 0 || !userData[0].is_admin) {
       console.error('❌ Not admin:', userData)
       return NextResponse.json({ 
         error: 'Forbidden - Admin only', 
-        details: `User role: ${userData[0]?.role || 'not found'}` 
+        details: `User is_admin: ${userData[0]?.is_admin || 'not found'}` 
       }, { status: 403 })
     }
 
-    console.log('✅ Admin verified:', userData[0].role)
+    console.log('✅ Admin verified:', userData[0].is_admin)
 
     // Update hours
     const { error } = await supabase

@@ -97,7 +97,7 @@ function ResetPasswordForm() {
               className="inline-block rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20 px-6 py-3 text-sm font-bold text-orange-500 border-2 border-orange-500/40 mb-6"
             >
               <Flame className="w-5 h-5 inline mr-2" />
-              BYTEBURGER
+              MAMI&apos;S COCINA
             </motion.div>
             <h1 className="text-4xl md:text-5xl font-black mb-3">
               <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 bg-clip-text text-transparent">

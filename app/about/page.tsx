@@ -39,21 +39,21 @@ export default function AboutPage() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-block rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20 px-6 py-3 text-sm font-bold text-orange-500 border-2 border-orange-500/40 mb-8"
+              className="inline-block rounded-full bg-gradient-to-r from-red-500/20 to-yellow-500/20 px-6 py-3 text-sm font-bold text-red-500 border-2 border-red-500/40 mb-8"
             >
-              <Flame className="w-4 h-4 inline mr-2" />
-              OUR STORY
+              <Heart className="w-4 h-4 inline mr-2" />
+              NUESTRA HISTORIA
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-black mb-8">
-              <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 bg-clip-text text-transparent">
-                Flame-Grilled
+              <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
+                Authentic Mexican
               </span>
               <br />
-              <span className="text-white">Excellence</span>
+              <span className="text-white">Tradition</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
-              Revolutionizing the fast-food experience with passion, quality, and innovation
+              Bringing generations of Mexican culinary tradition to your table with love and authenticity
             </p>
           </motion.div>
         </div>
@@ -64,10 +64,10 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { number: '50K+', label: 'Happy Customers', icon: Users },
-              { number: '100%', label: 'Fresh Ingredients', icon: Heart },
-              { number: '15min', label: 'Avg Delivery Time', icon: Zap },
-              { number: '4.9★', label: 'Customer Rating', icon: Award },
+              { number: '25K+', label: 'Happy Customers', icon: Users },
+              { number: '100%', label: 'Handmade Tortillas', icon: Heart },
+              { number: '20min', label: 'Avg Delivery Time', icon: Zap },
+              { number: '4.8★', label: 'Customer Rating', icon: Award },
             ].map((stat, index) => (
               <motion.div
                 key={index}
@@ -77,10 +77,10 @@ export default function AboutPage() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500/20 to-red-600/20 border-2 border-orange-500/30 rounded-2xl mb-4">
-                  <stat.icon className="w-8 h-8 text-orange-500" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500/20 to-yellow-600/20 border-2 border-red-500/30 rounded-2xl mb-4">
+                  <stat.icon className="w-8 h-8 text-red-500" />
                 </div>
-                <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-red-400 to-yellow-500 bg-clip-text text-transparent mb-2">
                   {stat.number}
                 </div>
                 <div className="text-gray-400 font-medium">{stat.label}</div>
@@ -101,23 +101,24 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-4xl md:text-5xl font-black mb-6">
-                <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
                   Our Story
                 </span>
               </h2>
               <div className="space-y-6 text-lg text-gray-300">
                 <p>
-                  ByteBurger was born from a simple idea: great burgers shouldn&apos;t compromise on quality or speed. 
-                  Founded in 2024, we set out to revolutionize fast food by combining traditional flame-grilling 
-                  techniques with modern technology.
+                  Mami's Cocina began in Mami's kitchen, where traditional Mexican recipes were passed down through 
+                  generations. What started as family gatherings filled with authentic tacos, homemade salsas, and 
+                  laughter has grown into a beloved community restaurant.
                 </p>
                 <p>
-                  Every burger we serve is flame-grilled to perfection using 100% fresh, never frozen Angus beef. 
-                  Our secret? Passion for quality, commitment to freshness, and a relentless focus on customer satisfaction.
+                  Every taco we serve is made with handmade tortillas, fresh ingredients, and the same love Mami 
+                  put into every meal. Our secret? Authentic recipes, traditional cooking methods, and a commitment 
+                  to bringing the warmth of Mexican hospitality to every customer.
                 </p>
                 <p>
-                  Today, we&apos;re proud to serve thousands of happy customers daily, each one experiencing the perfect 
-                  blend of speed, quality, and flavor that defines the ByteBurger experience.
+                  Today, we&apos;re proud to share Mami's legacy with our community, serving authentic Mexican cuisine 
+                  that tastes like home. Each dish tells a story of tradition, family, and the vibrant flavors of Mexico.
                 </p>
               </div>
             </motion.div>
@@ -132,8 +133,8 @@ export default function AboutPage() {
               <div className="relative bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/30 rounded-3xl overflow-hidden">
                 <div className="relative h-[500px]">
                   <Image
-                    src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=800&h=600&fit=crop&q=80"
-                    alt="Gourmet burger preparation"
+                    src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&h=600&fit=crop&q=80"
+                    alt="Authentic Mexican tacos"
                     fill
                     className="object-cover opacity-80"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -142,13 +143,13 @@ export default function AboutPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                 </div>
                 
-                {/* Flame effect */}
+                {/* Chili pepper effect */}
                 <motion.div
                   animate={{ opacity: [0.3, 0.7, 0.3], scale: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                   className="absolute bottom-8 right-8 text-6xl z-10"
                 >
-                  🔥
+                  🌶️
                 </motion.div>
               </div>
             </motion.div>
@@ -166,7 +167,7 @@ export default function AboutPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-6xl font-black mb-4">
-              <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
                 Our Values
               </span>
             </h2>
@@ -178,22 +179,22 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: Flame,
-                title: 'Quality First',
-                description: '100% fresh Angus beef, flame-grilled to perfection. No compromises, ever.',
-                gradient: 'from-orange-500/20 to-red-600/20',
+                icon: Heart,
+                title: 'Family Tradition',
+                description: 'Authentic recipes passed down through generations, made with love and care.',
+                gradient: 'from-red-500/20 to-yellow-600/20',
               },
               {
-                icon: Heart,
-                title: 'Made with Love',
-                description: 'Every burger is crafted with passion and attention to detail by our expert chefs.',
-                gradient: 'from-red-500/20 to-orange-600/20',
+                icon: Flame,
+                title: 'Fresh & Authentic',
+                description: 'Handmade tortillas daily, fresh ingredients, and traditional cooking methods.',
+                gradient: 'from-yellow-500/20 to-green-600/20',
               },
               {
                 icon: Target,
-                title: 'Customer Focused',
-                description: 'Your satisfaction drives us. We listen, we adapt, we deliver excellence.',
-                gradient: 'from-orange-600/20 to-red-500/20',
+                title: 'Community First',
+                description: 'Serving our community with warmth, hospitality, and the flavors of home.',
+                gradient: 'from-green-600/20 to-red-500/20',
               },
             ].map((value, index) => (
               <motion.div
@@ -203,10 +204,10 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                className="bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-2xl p-8 hover:border-orange-500/60 transition-all hover:shadow-2xl hover:shadow-orange-500/20"
+                className="bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-red-500/20 rounded-2xl p-8 hover:border-red-500/60 transition-all hover:shadow-2xl hover:shadow-red-500/20"
               >
-                <div className={`w-16 h-16 bg-gradient-to-br ${value.gradient} border-2 border-orange-500/30 rounded-xl flex items-center justify-center mb-6`}>
-                  <value.icon className="w-8 h-8 text-orange-500" />
+                <div className={`w-16 h-16 bg-gradient-to-br ${value.gradient} border-2 border-red-500/30 rounded-xl flex items-center justify-center mb-6`}>
+                  <value.icon className="w-8 h-8 text-red-500" />
                 </div>
                 <h3 className="text-2xl font-black text-white mb-4">{value.title}</h3>
                 <p className="text-gray-400 leading-relaxed">{value.description}</p>
@@ -217,7 +218,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission Statement */}
-      <section className="bg-gradient-to-br from-orange-600 via-red-600 to-orange-700 py-20 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-red-600 via-yellow-600 to-green-700 py-20 relative overflow-hidden">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
@@ -235,12 +236,12 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl font-black text-white mb-8">
-              Our Mission
+              Nuestra Misión
             </h2>
             <p className="text-xl md:text-2xl text-white/95 leading-relaxed">
-              To deliver exceptional fast-food experiences through innovation, quality, and 
-              customer-first service. Every burger we make, every order we fulfill, and every 
-              customer we serve is a step toward building the future of fast food.
+              To share the authentic flavors and warmth of Mexican tradition with our community. 
+              Every taco we make, every salsa we prepare, and every customer we serve is welcomed 
+              like family. ¡Bienvenidos a Mami's Cocina!
             </p>
           </motion.div>
         </div>

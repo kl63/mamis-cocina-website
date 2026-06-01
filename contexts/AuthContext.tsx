@@ -22,30 +22,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const supabase = createClient()
 
   // Check if user is admin
-  const checkAdminStatus = (currentUser: User | null) => {
+  const checkAdminStatus = async (currentUser: User | null) => {
+    console.log('🔍 Checking admin status for:', currentUser?.email || 'no user')
+    
     if (!currentUser) {
+      console.log('❌ No user, setting isAdmin to false')
       setIsAdmin(false)
       return
     }
 
     try {
-      // Check user_metadata for admin role
-      const role = currentUser.user_metadata?.role
-      const isAdminUser = role === 'admin'
+      console.log('📡 Fetching admin status from database for user ID:', currentUser.id)
+      
+      // Fetch admin status from public.users table
+      const { data, error } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', currentUser.id)
+        .single()
+      
+      console.log('📊 Database response:', { data, error })
+      
+      if (error) {
+        console.error('❌ Error fetching admin status:', error)
+        setIsAdmin(false)
+        return
+      }
+      
+      const isAdminUser = data?.is_admin || false
       
       // Debug logging
-      console.log('🔐 Auth Check:', {
+      console.log('🔐 Auth Check Result:', {
         email: currentUser.email,
-        role: role || 'customer',
-        isAdmin: isAdminUser
+        userId: currentUser.id,
+        isAdmin: isAdminUser,
+        rawData: data,
+        decision: isAdminUser ? '✅ SETTING AS ADMIN' : '❌ SETTING AS CUSTOMER'
       })
       
       setIsAdmin(isAdminUser)
+      console.log('🎯 Final admin state set to:', isAdminUser)
     } catch (error) {
-      console.error('Error checking admin status:', error)
+      console.error('💥 Exception checking admin status:', error)
       setIsAdmin(false)
     }
   }
+
+  // Periodic admin status refresh (every 30 seconds)
+  useEffect(() => {
+    if (!user) return
+    
+    const interval = setInterval(() => {
+      console.log('🔄 Refreshing admin status...')
+      checkAdminStatus(user)
+    }, 30000) // 30 seconds
+    
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   // Load user on mount and listen for auth changes
   useEffect(() => {
@@ -54,31 +88,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Get initial session with timeout
     const loadSession = async () => {
       try {
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Session timeout')), 3000)
-        )
-        
-        const sessionPromise = supabase.auth.getSession()
-        
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = await Promise.race([sessionPromise, timeoutPromise]) as any
+        console.log('🔄 Loading session...')
+        const { data, error } = await supabase.auth.getSession()
         
         if (!mounted) return
         
-        if (result?.data?.session) {
-          console.log('✅ Session loaded:', result.data.session.user.email)
-          setUser(result.data.session.user)
-          checkAdminStatus(result.data.session.user)
+        if (error) {
+          console.error('❌ Session error:', error)
+          setUser(null)
+          await checkAdminStatus(null)
+        } else if (data?.session) {
+          console.log('✅ Session loaded:', data.session.user.email)
+          setUser(data.session.user)
+          await checkAdminStatus(data.session.user)
         } else {
           console.log('ℹ️ No active session')
           setUser(null)
-          checkAdminStatus(null)
+          await checkAdminStatus(null)
         }
-      } catch {
-        console.log('⚠️ Session load timeout, continuing as guest')
+      } catch (error) {
+        console.error('⚠️ Session load error:', error)
         if (!mounted) return
         setUser(null)
-        checkAdminStatus(null)
+        await checkAdminStatus(null)
       } finally {
         if (mounted) {
           console.log('🔓 Auth loading complete')
@@ -141,13 +173,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Sign in existing user
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
       if (error) {
         return { error }
+      }
+
+      // Immediately check admin status after successful login
+      if (data?.user) {
+        console.log('✅ Login successful, checking admin status...')
+        setUser(data.user)
+        await checkAdminStatus(data.user)
       }
 
       return { error: null }
@@ -165,14 +204,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null)
       setIsAdmin(false)
       
-      // Sign out from Supabase (non-blocking for UI)
-      supabase.auth.signOut().catch((error) => {
-        console.error('❌ Sign out error:', error)
-      })
+      // Sign out from Supabase
+      await supabase.auth.signOut()
+      
+      // Clear all browser storage to prevent stale cache
+      if (typeof window !== 'undefined') {
+        localStorage.clear()
+        sessionStorage.clear()
+      }
       
       console.log('✅ Signed out successfully')
       
-      // Use Next.js router for faster navigation (no full page reload)
+      // Force full page reload to clear all state
       if (typeof window !== 'undefined') {
         window.location.href = '/'
       }

@@ -48,8 +48,8 @@ export default function NotFound() {
             </h1>
             <div className="relative w-[150px] h-[150px] md:w-[200px] md:h-[200px]">
               <Image
-                src="/logo.png"
-                alt="ByteBurger Logo"
+                src="/mamis_cocina_logo.png"
+                alt="Mami's Cocina Logo"
                 fill
                 className="object-contain"
               />

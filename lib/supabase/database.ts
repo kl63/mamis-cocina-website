@@ -129,7 +129,7 @@ export async function getMenuItemsByCategory(categoryId: string) {
 }
 
 export async function getPopularMenuItems() {
-  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/menu_items?select=*&is_popular=eq.true&is_available=eq.true&limit=6`
+  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/menu_items?select=*&is_featured=eq.true&is_available=eq.true&limit=6`
   const headers = {
     'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`

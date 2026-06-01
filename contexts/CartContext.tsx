@@ -36,6 +36,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Load user and cart on mount
   useEffect(() => {
     async function loadCart() {
+      // Cart disabled for Mami's Cocina - skip loading
+      console.log('🚫 Cart loading disabled')
+      setCart([])
+      setLoading(false)
+      return
+      
+      /* Original cart loading code disabled
       try {
         // Check if user is authenticated with timeout
         const timeoutPromise = new Promise<null>((_, reject) => 
@@ -70,6 +77,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       } finally {
         setLoading(false)
       }
+      */
     }
 
     loadCart()
@@ -79,13 +87,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const newUserId = session?.user?.id
 
       if (event === 'SIGNED_IN' && newUserId) {
-        // User just logged in - migrate guest cart to user cart
-        await cartDb.migrateGuestCartToUser(newUserId)
+        // Cart feature disabled for Mami's Cocina - no migration needed
         setUserId(newUserId)
-        
-        // Reload cart
-        const cartItems = await cartDb.getUserCart(newUserId)
-        setCart(cartItems)
       } else if (event === 'SIGNED_OUT') {
         // User logged out - switch to guest cart
         setUserId(undefined)
@@ -114,6 +117,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     selectedSauces: string[],
     itemPrice: number
   ) => {
+    // Cart functionality disabled for Mami's Cocina
+    console.log('🚫 Add to cart disabled:', menuItem.name)
+    alert('Online ordering is currently disabled. Please call us to place an order!')
+    return
+    
+    /* Original cart code disabled
     try {
       console.log('🛒 Adding to cart:', {
         item: menuItem.name,
@@ -149,6 +158,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('❌ Error adding to cart:', error)
     }
+    */
   }
 
   const removeFromCart = async (itemId: string) => {

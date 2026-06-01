@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ShoppingCart, Menu, User, LogOut, Gift } from 'lucide-react'
+import { ShoppingCart, Menu, User, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
 import { useCart } from '@/contexts/CartContext'
@@ -30,8 +30,8 @@ export function Navbar() {
             <Link href="/" className="flex items-center">
               <div className="relative h-20 w-64">
                 <Image
-                  src="/logo.png"
-                  alt="ByteBurger Logo"
+                  src="/mamis_cocina_logo.png"
+                  alt="Mami's Cocina Logo"
                   fill
                   className="object-contain"
                   priority
@@ -52,15 +52,6 @@ export function Navbar() {
               >
                 Menu
               </Link>
-              {mounted && user && (
-                <Link
-                  href="/rewards"
-                  className="text-sm font-medium text-orange-400 hover:text-orange-300 transition-colors flex items-center gap-1"
-                >
-                  <Gift className="h-4 w-4" />
-                  Rewards
-                </Link>
-              )}
               <Link
                 href="/about"
                 className="text-sm font-medium text-white/80 hover:text-white transition-colors"
@@ -71,22 +62,12 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Button asChild variant="ghost" size="icon" className="relative hidden sm:flex text-white hover:bg-white/10">
-              <Link href="/cart">
-                <ShoppingCart className="h-5 w-5" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-red-600 text-[10px] font-bold text-white">
-                    {itemCount}
-                  </span>
-                )}
-              </Link>
-            </Button>
-
+            {/* Cart disabled for Mami's Cocina */}
             {user ? (
               <div className="hidden sm:flex items-center gap-2">
-                <Link href="/account" className="text-sm text-gray-300 hover:text-white transition-colors">
+                <span className="text-sm text-gray-300">
                   {user.user_metadata?.full_name || user.email}
-                </Link>
+                </span>
                 {isAdmin ? (
                   <Link href="/admin">
                     <span className="text-xs bg-orange-500/20 text-orange-500 px-2 py-1 rounded-full font-bold border border-orange-500/30">
@@ -148,16 +129,6 @@ export function Navbar() {
               >
                 Menu
               </Link>
-              {mounted && user && (
-                <Link
-                  href="/rewards"
-                  className="text-sm font-medium text-orange-400 hover:text-orange-300 transition-colors flex items-center gap-1"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Gift className="h-4 w-4" />
-                  Rewards
-                </Link>
-              )}
               <Link
                 href="/about"
                 className="text-sm font-medium text-white/80 hover:text-white transition-colors"

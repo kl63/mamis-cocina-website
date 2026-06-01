@@ -257,7 +257,7 @@ export default function AdminPage() {
         price: editingItem.price,
         category_id: editingItem.category_id,
         calories: editingItem.calories,
-        is_popular: editingItem.is_popular,
+        is_featured: editingItem.is_featured || editingItem.is_popular,
         image_url: editingItem.image_url,
       })
       
@@ -519,11 +519,13 @@ export default function AdminPage() {
           <nav className="space-y-2">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-              { id: 'orders', label: 'Orders', icon: ShoppingBag },
+              // Orders disabled for Mami's Cocina
+              // { id: 'orders', label: 'Orders', icon: ShoppingBag },
               { id: 'menu', label: 'Menu Items', icon: MenuSquare },
               { id: 'categories', label: 'Categories', icon: Package },
               { id: 'hours', label: 'Restaurant Hours', icon: Clock },
-              { id: 'analytics', label: 'Analytics', icon: TrendingUp },
+              // Analytics disabled for Mami's Cocina
+              // { id: 'analytics', label: 'Analytics', icon: TrendingUp },
             ].map((item) => (
               <button
                 key={item.id}
@@ -539,21 +541,7 @@ export default function AdminPage() {
               </button>
             ))}
             
-            {/* Go to Kitchen Button */}
-            <Link href="/kitchen" className="w-full">
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg hover:shadow-xl hover:scale-105">
-                <ChefHat className="w-5 h-5" />
-                <span className="font-bold">Go to Kitchen</span>
-              </button>
-            </Link>
-
-            {/* Go to Kiosk Button */}
-            <Link href="/kiosk" className="w-full">
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg hover:shadow-xl hover:scale-105">
-                <ShoppingBag className="w-5 h-5" />
-                <span className="font-bold">Go to Kiosk</span>
-              </button>
-            </Link>
+            {/* Kitchen and Kiosk disabled for Mami's Cocina */}
           </nav>
         </motion.aside>
 
@@ -565,7 +553,7 @@ export default function AdminPage() {
               <h2 className="text-3xl font-black text-white mb-8">Dashboard Overview</h2>
               
               {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -589,33 +577,6 @@ export default function AdminPage() {
                   </div>
                   <p className="text-gray-400 text-sm mb-1">Categories</p>
                   <p className="text-3xl font-black text-white">{stats.categories}</p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <ShoppingBag className="w-8 h-8 text-orange-500" />
-                  </div>
-                  <p className="text-gray-400 text-sm mb-1">Active Carts</p>
-                  <p className="text-3xl font-black text-white">{stats.activeCarts}</p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <Package className="w-8 h-8 text-purple-500" />
-                  </div>
-                  <p className="text-gray-400 text-sm mb-1">Total Orders</p>
-                  <p className="text-3xl font-black text-white">{stats.totalOrders}</p>
-                  <p className="text-xs text-gray-500 mt-1">Coming soon</p>
                 </motion.div>
               </div>
 

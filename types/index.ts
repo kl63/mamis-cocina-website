@@ -33,7 +33,8 @@ export interface MenuItem {
   image_url?: string
   calories?: number
   is_available: boolean
-  is_popular: boolean
+  is_featured: boolean
+  is_popular?: boolean // Legacy field for backwards compatibility
   customization_options?: CustomizationOption[]
   created_at: string
   updated_at: string

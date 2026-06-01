@@ -446,7 +446,7 @@ export async function getActiveCartsWithItems() {
 export async function togglePopularItem(id: string, isPopular: boolean) {
   const { data, error } = await supabase
     .from('menu_items')
-    .update({ is_popular: isPopular })
+    .update({ is_featured: isPopular })
     .eq('id', id)
     .select()
     .single()

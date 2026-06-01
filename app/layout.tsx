@@ -18,8 +18,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "ByteBurger - Fast Food Ordering Platform",
-  description: "Experience futuristic fast-food ordering with ByteBurger. Order burgers, sides, and drinks with real-time tracking and customization.",
+  title: "Mami's Cocina - Authentic Mexican Tacos",
+  description: "Experience authentic Mexican cuisine at Mami's Cocina. Order delicious tacos, burritos, quesadillas, and more with real-time tracking and customization.",
 };
 
 export default function RootLayout({
