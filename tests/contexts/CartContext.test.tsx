@@ -16,7 +16,7 @@ function TestComponent() {
     category_id: 'cat-1',
     image_url: '🍔',
     is_available: true,
-    is_popular: false,
+    is_featured: false,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   }
