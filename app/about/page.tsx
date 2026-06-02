@@ -102,23 +102,19 @@ export default function AboutPage() {
             >
               <h2 className="text-4xl md:text-5xl font-black mb-6">
                 <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
-                  Our Story
+                  Family Connection
                 </span>
               </h2>
               <div className="space-y-6 text-lg text-gray-300">
                 <p>
-                  Mami&apos;s Cocina began in Mami&apos;s kitchen, where traditional Mexican recipes were passed down through 
-                  generations. What started as family gatherings filled with authentic tacos, homemade salsas, and 
-                  laughter has grown into a beloved community restaurant.
+                  Mami&apos;s Cocina is more than just a restaurant; it&apos;s our family&apos;s kitchen, shared with you. 
+                  For over 7 years, we&apos;ve been passing down cherished family recipes, the kind we grew up with 
+                  and love to eat. We&apos;ve poured our heart and soul into every dish, using flavors and traditions 
+                  that have been in our family for generations.
                 </p>
                 <p>
-                  Every taco we serve is made with handmade tortillas, fresh ingredients, and the same love Mami 
-                  put into every meal. Our secret? Authentic recipes, traditional cooking methods, and a commitment 
-                  to bringing the warmth of Mexican hospitality to every customer.
-                </p>
-                <p>
-                  Today, we&apos;re proud to share Mami&apos;s legacy with our community, serving authentic Mexican cuisine 
-                  that tastes like home. Each dish tells a story of tradition, family, and the vibrant flavors of Mexico.
+                  We want you to feel the same warmth and joy we do when we sit down for a big family meal. 
+                  From our Casa to yours.
                 </p>
               </div>
             </motion.div>

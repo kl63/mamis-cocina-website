@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Zap, Star, TrendingUp, Flame, ChevronRight } from 'lucide-react'
+import { Zap, Star, TrendingUp, Flame, ChevronRight, Clock, MapPin, Phone } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { getPopularMenuItems } from '@/lib/supabase/database'
 import type { MenuItem } from '@/types'
@@ -19,32 +19,77 @@ const categoryEmojis: Record<string, string> = {
   'Desserts': '�',
 }
 
+interface RestaurantHours {
+  day: string
+  open_time: string
+  close_time: string
+  is_closed: boolean
+}
+
+// Cache hours data to avoid refetching on every render
+let cachedHours: RestaurantHours[] | null = null
+let lastHoursFetchTime = 0
+const HOURS_CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
+
 export default function Home() {
   const [popularItems, setPopularItems] = useState<MenuItem[]>([])
+  const [hours, setHours] = useState<RestaurantHours[]>(cachedHours || [])
   const [loading, setLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
 
-  // Fetch popular items and restaurant status on mount
+  // Fetch popular items and hours on mount
   useEffect(() => {
     async function fetchData() {
       try {
-        const [items, statusResponse] = await Promise.all([
-          getPopularMenuItems(),
-          fetch('/api/restaurant-status')
-        ])
+        const now = Date.now()
         
+        // Fetch popular items
+        const items = await getPopularMenuItems()
         setPopularItems(items.slice(0, 3)) // Show only 3 items
+
+        // Only fetch hours if cache is empty or expired
+        let fetchedHours = cachedHours || []
+        if (!cachedHours || now - lastHoursFetchTime > HOURS_CACHE_DURATION) {
+          const hoursResponse = await fetch('/api/restaurant-hours')
+          const hoursData = await hoursResponse.json()
+          fetchedHours = hoursData.hours || []
+          cachedHours = fetchedHours
+          lastHoursFetchTime = now
+          setHours(fetchedHours)
+        }
+
+        // Calculate if restaurant is open based on current day and time
+        const currentDate = new Date()
+        const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'long' })
+        const currentTime = currentDate.toTimeString().slice(0, 5) // HH:MM format
         
-        const statusData = await statusResponse.json()
-        setIsOpen(statusData.isOpen)
+        const todayHours = fetchedHours?.find((h: RestaurantHours) => h.day === currentDay)
+        
+        if (todayHours && !todayHours.is_closed) {
+          // Check if current time is within operating hours
+          const isCurrentlyOpen = currentTime >= todayHours.open_time && currentTime <= todayHours.close_time
+          setIsOpen(isCurrentlyOpen)
+        } else {
+          setIsOpen(false)
+        }
       } catch (error) {
         console.error('Error fetching data:', error)
+        setIsOpen(false)
       } finally {
         setLoading(false)
       }
     }
     fetchData()
   }, [])
+
+  // Format time from 24h to 12h format
+  const formatTime = (time: string) => {
+    const [hours, minutes] = time.split(':')
+    const hour = parseInt(hours)
+    const ampm = hour >= 12 ? 'PM' : 'AM'
+    const displayHour = hour % 12 || 12
+    return `${displayHour}:${minutes} ${ampm}`
+  }
 
   return (
     <div className="flex flex-col">
@@ -264,8 +309,84 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Store Info Section */}
+      <section className="py-12 bg-gradient-to-b from-black via-gray-900 to-black">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+              Visit Us Today
+            </h2>
+            <p className="text-lg text-gray-400">Come experience authentic Mexican cuisine</p>
+          </motion.div>
+
+          <div className="space-y-6">
+            {/* Phone - Featured at top */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-xl p-6 text-center hover:border-orange-500/80 transition-all max-w-md mx-auto"
+            >
+              <Phone className="w-12 h-12 text-orange-500 mx-auto mb-3" />
+              <h3 className="text-2xl font-black text-white mb-2">Call to Order</h3>
+              <a href="tel:+19089376927" className="text-xl font-bold text-orange-400 hover:text-orange-300 transition-colors">
+                (908) 937-6927
+              </a>
+            </motion.div>
+
+            {/* Location and Hours side by side */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Address */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-500/20 rounded-xl p-6 text-center hover:border-orange-500/60 transition-all"
+              >
+                <MapPin className="w-10 h-10 text-orange-500 mx-auto mb-3" />
+                <h3 className="text-xl font-bold text-white mb-3">Location</h3>
+                <p className="text-gray-300">449 N Wood Ave</p>
+                <p className="text-gray-300">Linden, NJ 07036</p>
+              </motion.div>
+
+              {/* Hours */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-500/20 rounded-xl p-6 text-center hover:border-orange-500/60 transition-all"
+              >
+                <Clock className="w-10 h-10 text-orange-500 mx-auto mb-3" />
+                <h3 className="text-xl font-bold text-white mb-3">Hours</h3>
+                <div className="space-y-0.5">
+                  {hours.length > 0 ? (
+                    hours.map((hour) => (
+                      <p key={hour.day} className="text-gray-300 text-xs">
+                        <span className="font-medium">{hour.day}:</span>{' '}
+                        {hour.is_closed ? 'Closed' : `${formatTime(hour.open_time)} - ${formatTime(hour.close_time)}`}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="text-gray-400 text-sm">Loading hours...</p>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section with Animations */}
-      <section className="py-24 bg-gradient-to-b from-black via-gray-950 to-black relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-b from-gray-900 via-black to-gray-900 relative overflow-hidden">
         {/* Background effect */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
@@ -396,7 +517,7 @@ export default function Home() {
               transition={{ delay: 0.2 }}
               className="text-xl md:text-3xl text-white/95 mb-12 max-w-4xl mx-auto font-medium"
             >
-              Order now and taste authentic Mexican cuisine delivered in <span className="font-black text-yellow-300">30 minutes</span> or it&apos;s <span className="font-black text-yellow-300">FREE!</span>
+              Order now and taste <span className="font-black text-yellow-300">authentic Mexican cuisine!</span>
             </motion.p>
 
             <motion.div

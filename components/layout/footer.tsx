@@ -68,7 +68,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border/40 bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-6">
             <div className="flex items-center">
               <div className="relative h-32 w-80">
@@ -110,6 +110,19 @@ export function Footer() {
           </div>
 
           <div>
+            <h3 className="font-semibold mb-4">Address</h3>
+            <address className="not-italic text-sm text-muted-foreground space-y-2">
+              <p>449 N Wood Ave</p>
+              <p>Linden, NJ 07036</p>
+              <p className="pt-2">
+                <a href="tel:+19089376927" className="hover:text-foreground transition-colors">
+                  (908) 937-6927
+                </a>
+              </p>
+            </address>
+          </div>
+
+          <div>
             <h3 className="font-semibold mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5" />
               Hours of Operation
@@ -133,7 +146,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-border/40">
           <p className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Mami&apos;s Cocina. All rights reserved.
+            © {new Date().getFullYear()}{' '}Mami&apos;s Cocina. All rights reserved.
           </p>
         </div>
       </div>

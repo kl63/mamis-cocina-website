@@ -110,8 +110,11 @@ export default function MenuPage() {
               <br />
               <span className="text-white">Perfection</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-4">
               Fresh ingredients, bold flavors, and endless possibilities
+            </p>
+            <p className="text-sm md:text-base text-yellow-400/90 max-w-2xl mx-auto bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-4 py-2">
+              ⚠️ Menu prices are subject to change. Please ask for current pricing. Thanks!
             </p>
           </motion.div>
         </div>
