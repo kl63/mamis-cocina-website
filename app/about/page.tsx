@@ -62,7 +62,7 @@ export default function AboutPage() {
       {/* Stats Section */}
       <section className="bg-gradient-to-b from-gray-900 via-black to-gray-900 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {[
               { number: '25K+', label: 'Happy Customers', icon: Users },
               { number: '100%', label: 'Handmade Tortillas', icon: Heart },
@@ -80,10 +80,10 @@ export default function AboutPage() {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500/20 to-yellow-600/20 border-2 border-red-500/30 rounded-2xl mb-4">
                   <stat.icon className="w-8 h-8 text-red-500" />
                 </div>
-                <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-red-400 to-yellow-500 bg-clip-text text-transparent mb-2">
+                <div className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-red-400 to-yellow-500 bg-clip-text text-transparent mb-2">
                   {stat.number}
                 </div>
-                <div className="text-gray-400 font-medium">{stat.label}</div>
+                <div className="text-sm md:text-base text-gray-400 font-medium">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -100,7 +100,7 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-4xl md:text-5xl font-black mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-6">
                 <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
                   Family Connection
                 </span>
@@ -162,7 +162,7 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-6xl font-black mb-4">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-4">
               <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
                 Our Values
               </span>
@@ -231,10 +231,10 @@ export default function AboutPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-8">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6 md:mb-8">
               Nuestra Misión
             </h2>
-            <p className="text-xl md:text-2xl text-white/95 leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-white/95 leading-relaxed px-4">
               To share the authentic flavors and warmth of Mexican tradition with our community. 
               Every taco we make, every salsa we prepare, and every customer we serve is welcomed 
               like family. ¡Bienvenidos a Mami&apos;s Cocina!

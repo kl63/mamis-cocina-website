@@ -10,7 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
-  const [isLogin, setIsLogin] = useState(true)
+  const [isLogin] = useState(true) // setIsLogin removed since sign-up is disabled
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [fullName, setFullName] = useState('')
@@ -242,7 +242,9 @@ function LoginForm() {
               </div>
             </form>
 
-            {/* Toggle Login/Register */}
+            {/* Toggle Login/Register - COMMENTED OUT FOR NOW */}
+            {/* Uncomment below to re-enable sign-up functionality */}
+            {/*
             <div className="mt-6 text-center text-gray-400">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
               <button
@@ -252,6 +254,7 @@ function LoginForm() {
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
             </div>
+            */}
           </motion.div>
         </motion.div>
       </div>

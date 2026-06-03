@@ -13,7 +13,8 @@ import {
   TrendingUp,
   Package,
   Loader2,
-  Clock
+  Clock,
+  Menu
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
@@ -139,6 +140,7 @@ export default function AdminPage() {
   const [peakHoursData, setPeakHoursData] = useState<any[]>([])
   const [analyticsLoading, setAnalyticsLoading] = useState(false)
   const [timeRange, setTimeRange] = useState<7 | 30 | 90>(7)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Data loading function
   const loadData = useCallback(async () => {
@@ -488,17 +490,45 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-black to-gray-900">
+      {/* Mobile Menu Toggle */}
+      <div className="lg:hidden fixed top-20 left-0 right-0 z-50 px-4">
+        <Button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg"
+          size="sm"
+        >
+          <Menu className="w-4 h-4 mr-2" />
+          Menu
+        </Button>
+      </div>
+
       <div className="flex">
         {/* Sidebar */}
         <motion.aside
-          initial={{ x: -300 }}
-          animate={{ x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-64 min-h-screen bg-gradient-to-b from-gray-900 to-black border-r border-orange-500/20 p-6"
+          initial={false}
+          animate={{ 
+            x: mobileMenuOpen ? 0 : -300,
+            display: mobileMenuOpen ? 'block' : 'none'
+          }}
+          transition={{ duration: 0.3 }}
+          className="fixed lg:relative lg:!block lg:!translate-x-0 w-64 min-h-screen bg-gradient-to-b from-gray-900 to-black border-r border-orange-500/20 p-6 z-40"
         >
           <div className="mb-8">
-            <h1 className="text-2xl font-black text-white mb-2">Admin Panel</h1>
-            <p className="text-gray-400 text-sm">ByteBurger Dashboard</p>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h1 className="text-2xl font-black text-white mb-2">Admin Panel</h1>
+                <p className="text-gray-400 text-sm">ByteBurger Dashboard</p>
+              </div>
+              {/* Close button for mobile */}
+              <Button
+                onClick={() => setMobileMenuOpen(false)}
+                variant="ghost"
+                size="sm"
+                className="lg:hidden text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
             
             {/* Admin User Info */}
             <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
@@ -528,7 +558,10 @@ export default function AdminPage() {
             ].map((item) => (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  setActiveTab(item.id)
+                  setMobileMenuOpen(false)
+                }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                   activeTab === item.id
                     ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg'
@@ -545,11 +578,11 @@ export default function AdminPage() {
         </motion.aside>
 
         {/* Main Content */}
-        <div className="flex-1 p-8">
+        <div className="flex-1 p-4 lg:p-8 w-full lg:w-auto pt-16 lg:pt-8">
           {/* Dashboard Tab */}
           {activeTab === 'dashboard' && (
             <div>
-              <h2 className="text-3xl font-black text-white mb-8">Dashboard Overview</h2>
+              <h2 className="text-2xl lg:text-3xl font-black text-white mb-6 lg:mb-8">Dashboard Overview</h2>
               
               {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -606,7 +639,7 @@ export default function AdminPage() {
           {activeTab === 'orders' && (
             <div>
               <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-black text-white">Orders Management</h2>
+                <h2 className="text-2xl lg:text-3xl font-black text-white">Orders Management</h2>
               </div>
 
               {/* Orders Table */}
@@ -718,8 +751,8 @@ export default function AdminPage() {
           {/* Menu Items Tab */}
           {activeTab === 'menu' && (
             <div>
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-black text-white">Menu Items</h2>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 lg:mb-8">
+                <h2 className="text-2xl lg:text-3xl font-black text-white">Menu Items</h2>
                 <Button 
                   className="bg-gradient-to-r from-orange-500 to-red-600 text-white"
                   onClick={() => setIsAddModalOpen(true)}
@@ -735,7 +768,7 @@ export default function AdminPage() {
                   <p className="text-gray-400">No menu items found. Add your first item!</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-4 overflow-x-auto">
                   {menuItems.map((item) => (
                     <motion.div
                       key={item.id}
@@ -743,9 +776,9 @@ export default function AdminPage() {
                       animate={{ opacity: 1, y: 0 }}
                       className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 hover:border-orange-500/40 transition-all"
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4 flex-1">
-                          <div className="w-20 h-20 flex-shrink-0">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 flex-1 w-full">
+                          <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
                             {item.image_url && (item.image_url.startsWith('http') || item.image_url.startsWith('/')) ? (
                               // eslint-disable-next-line @next/next/no-img-element
                               <img 
@@ -809,8 +842,8 @@ export default function AdminPage() {
           {/* Categories Tab */}
           {activeTab === 'categories' && (
             <div>
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-black text-white">Categories</h2>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 lg:mb-8">
+                <h2 className="text-2xl lg:text-3xl font-black text-white">Categories</h2>
                 <Button 
                   onClick={() => setIsAddCategoryModalOpen(true)}
                   className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white"
@@ -1160,13 +1193,13 @@ export default function AdminPage() {
 
       {/* Edit Modal */}
       {isEditModalOpen && editingItem && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-start justify-center overflow-y-auto p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 lg:p-8 max-w-2xl w-full my-8"
           >
-            <h2 className="text-3xl font-black text-white mb-6">Edit Menu Item</h2>
+              <h2 className="text-2xl lg:text-3xl font-black text-white mb-6">Edit Menu Item</h2>
             
             <div className="space-y-4">
               <div>
@@ -1273,13 +1306,13 @@ export default function AdminPage() {
 
       {/* Add New Item Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-start justify-center overflow-y-auto p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 lg:p-8 max-w-2xl w-full my-8"
           >
-            <h2 className="text-3xl font-black text-white mb-6">Add New Menu Item</h2>
+              <h2 className="text-2xl lg:text-3xl font-black text-white mb-6">Add New Menu Item</h2>
             
             <div className="space-y-4">
               <div>

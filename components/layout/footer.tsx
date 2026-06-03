@@ -146,7 +146,11 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-border/40">
           <p className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()}{' '}Mami&apos;s Cocina. All rights reserved.
+            © {new Date().getFullYear()}{' '}
+            <Link href="/login" className="hover:text-foreground hover:underline transition-colors cursor-pointer">
+              Mami&apos;s Cocina
+            </Link>
+            . All rights reserved.
           </p>
         </div>
       </div>

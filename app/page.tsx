@@ -145,7 +145,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-tight mb-8"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight mb-6 md:mb-8"
             >
               <span className="bg-gradient-to-r from-red-500 to-yellow-500 bg-clip-text text-transparent">
                 Authentic
@@ -160,7 +160,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-xl md:text-3xl text-gray-300 max-w-3xl mx-auto font-medium mb-12"
+              className="text-lg md:text-2xl lg:text-3xl text-gray-300 max-w-3xl mx-auto font-medium mb-8 md:mb-12 px-4"
             >
               Authentic tacos made with love, served with tradition.
               <br />
@@ -171,16 +171,16 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4"
             >
-              <Button asChild className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black text-lg px-10 py-7 rounded-full shadow-2xl hover:scale-110 transition-all">
+              <Button asChild className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-7 rounded-full shadow-2xl hover:scale-110 transition-all w-full sm:w-auto max-w-xs">
                 <Link href="/menu">
                   <Flame className="mr-2 w-6 h-6" />
                   ORDER NOW
                   <ChevronRight className="ml-2 w-6 h-6" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-black text-lg px-10 py-7 rounded-full transition-all">
+              <Button asChild variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-black text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-7 rounded-full transition-all w-full sm:w-auto max-w-xs">
                 <Link href="/about">LEARN MORE</Link>
               </Button>
             </motion.div>
@@ -203,13 +203,13 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-7xl font-black mb-4 text-white">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4 text-white">
               <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
-                Featured Menu
+                Popular Items
               </span>
             </h2>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
-              Authentic Mexican dishes made fresh daily
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto px-4">
+              From our casa to yours
             </p>
           </motion.div>
 
@@ -219,7 +219,7 @@ export default function Home() {
               <p className="text-xl text-gray-400 mt-4">Loading popular items...</p>
             </div>
           ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {popularItems.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -385,6 +385,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Menu PDF Section */}
+      <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-8 lg:p-12 text-center"
+          >
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+              View Our Full Menu
+            </h2>
+            <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+              Download our complete menu to see all our delicious offerings
+            </p>
+            <Button 
+              asChild 
+              className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black text-lg px-10 py-6 rounded-full shadow-2xl hover:scale-110 transition-all"
+            >
+              <a href="/menu.pdf" download="Mamis-Cocina-Menu.pdf">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download Menu PDF
+              </a>
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Features Section with Animations */}
       <section className="py-24 bg-gradient-to-b from-gray-900 via-black to-gray-900 relative overflow-hidden">
         {/* Background effect */}
@@ -402,7 +433,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center space-y-4 mb-16"
           >
-            <h2 className="text-4xl md:text-6xl font-black">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black">
               <span className="bg-gradient-to-r from-red-400 via-yellow-500 to-green-500 bg-clip-text text-transparent">
                 Why Choose Mami&apos;s Cocina?
               </span>
@@ -515,7 +546,7 @@ export default function Home() {
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-xl md:text-3xl text-white/95 mb-12 max-w-4xl mx-auto font-medium"
+              className="text-lg md:text-2xl lg:text-3xl text-white/95 mb-8 md:mb-12 max-w-4xl mx-auto font-medium px-4"
             >
               Order now and taste <span className="font-black text-yellow-300">authentic Mexican cuisine!</span>
             </motion.p>
@@ -525,9 +556,9 @@ export default function Home() {
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4"
             >
-              <Button asChild className="bg-white text-red-600 hover:bg-gray-100 px-12 py-8 text-xl rounded-full shadow-2xl hover:scale-110 transition-all duration-300 font-black">
+              <Button asChild className="bg-white text-red-600 hover:bg-gray-100 px-8 sm:px-12 py-6 sm:py-8 text-lg sm:text-xl rounded-full shadow-2xl hover:scale-110 transition-all duration-300 font-black w-full sm:w-auto max-w-xs">
                 <Link href="/menu">
                   <Flame className="mr-3 w-6 h-6" />
                   Order Now
@@ -535,7 +566,7 @@ export default function Home() {
                 </Link>
               </Button>
 
-              <Button asChild className="bg-transparent border-4 border-white text-white hover:bg-white hover:text-red-600 px-12 py-8 text-xl rounded-full transition-all duration-300 font-black shadow-2xl">
+              <Button asChild className="bg-transparent border-4 border-white text-white hover:bg-white hover:text-red-600 px-8 sm:px-12 py-6 sm:py-8 text-lg sm:text-xl rounded-full transition-all duration-300 font-black shadow-2xl w-full sm:w-auto max-w-xs">
                 <Link href="/about">
                   Our Story
                 </Link>

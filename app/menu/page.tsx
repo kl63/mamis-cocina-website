@@ -105,13 +105,13 @@ export default function MenuPage() {
             
             <h1 className="text-5xl md:text-7xl font-black mb-6">
               <span className="bg-gradient-to-r from-orange-400 via-red-500 to-orange-500 bg-clip-text text-transparent">
-                Flame-Grilled
+                From Our Casa
               </span>
               <br />
-              <span className="text-white">Perfection</span>
+              <span className="text-white">to Yours</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-4">
-              Fresh ingredients, bold flavors, and endless possibilities
+              Authentic Mexican cuisine made with love and tradition
             </p>
             <p className="text-sm md:text-base text-yellow-400/90 max-w-2xl mx-auto bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-4 py-2">
               ⚠️ Menu prices are subject to change. Please ask for current pricing. Thanks!
