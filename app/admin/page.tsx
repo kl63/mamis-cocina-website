@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { 
   LayoutDashboard, 
   ShoppingBag, 
@@ -505,9 +506,9 @@ export default function AdminPage() {
       </div>
 
       <div className="flex">
-        {/* Sidebar */}
+        {/* Sidebar - Hidden since navigation is on dashboard */}
         <aside
-          className={`fixed lg:static w-64 min-h-screen bg-gradient-to-b from-gray-900 to-black border-r border-orange-500/20 p-6 z-40 transition-transform duration-300 ${
+          className={`hidden fixed lg:static w-64 min-h-screen bg-gradient-to-b from-gray-900 to-black border-r border-orange-500/20 p-6 z-40 transition-transform duration-300 ${
             mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}
         >
@@ -578,9 +579,52 @@ export default function AdminPage() {
 
         {/* Main Content */}
         <div className="flex-1 p-4 lg:p-8 w-full lg:w-auto pt-16 lg:pt-8">
+          {/* Header with Logo */}
+          <div className="mb-8">
+            <div className="flex justify-center mb-6">
+              <div className="relative h-32 w-80">
+                <Image
+                  src="/mamis_cocina_logo.png"
+                  alt="Mami's Cocina Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl font-black text-white">Admin Panel</h1>
+                <p className="text-gray-400 text-sm">Mami&apos;s Cocina</p>
+              </div>
+              {activeTab !== 'dashboard' && (
+                <Button
+                  onClick={() => setActiveTab('dashboard')}
+                  className="bg-gradient-to-r from-orange-500 to-red-600 text-white"
+                >
+                  <LayoutDashboard className="w-4 h-4 mr-2" />
+                  Return to Dashboard
+                </Button>
+              )}
+            </div>
+          </div>
+
           {/* Dashboard Tab */}
           {activeTab === 'dashboard' && (
             <div>
+              {/* Admin User Info */}
+              <div className="mb-8 p-4 bg-orange-500/10 border border-orange-500/30 rounded-xl">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-xs text-gray-400">Signed in as</span>
+                </div>
+                <p className="text-sm text-white font-bold">
+                  {user?.user_metadata?.full_name || user?.email}
+                </p>
+                <span className="text-xs bg-orange-500/20 text-orange-500 px-2 py-0.5 rounded-full font-bold border border-orange-500/30">
+                  👑 Admin
+                </span>
+              </div>
+
               <h2 className="text-2xl lg:text-3xl font-black text-white mb-6 lg:mb-8">Dashboard Overview</h2>
               
               {/* Stats Grid */}
@@ -611,25 +655,79 @@ export default function AdminPage() {
                 </motion.div>
               </div>
 
-              {/* Quick Actions */}
-              <div className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6">
-                <h3 className="text-xl font-black text-white mb-4">Quick Actions</h3>
-                <div className="flex flex-wrap gap-4">
-                  <Button
-                    onClick={() => setActiveTab('menu')}
-                    className="bg-gradient-to-r from-orange-500 to-red-600 text-white"
-                  >
-                    <MenuSquare className="w-4 h-4 mr-2" />
-                    Manage Menu
-                  </Button>
-                  <Button
-                    onClick={() => setActiveTab('categories')}
-                    className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white"
-                  >
-                    <Package className="w-4 h-4 mr-2" />
-                    Manage Categories
-                  </Button>
-                </div>
+              {/* Navigation Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  onClick={() => setActiveTab('menu')}
+                  className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-6 cursor-pointer hover:border-orange-500/80 hover:shadow-2xl hover:shadow-orange-500/20 transition-all"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
+                      <MenuSquare className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white">Menu Items</h3>
+                      <p className="text-gray-400 text-sm">Manage your menu items</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  onClick={() => setActiveTab('categories')}
+                  className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/40 rounded-2xl p-6 cursor-pointer hover:border-blue-500/80 hover:shadow-2xl hover:shadow-blue-500/20 transition-all"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
+                      <Package className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white">Categories</h3>
+                      <p className="text-gray-400 text-sm">Manage menu categories</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  onClick={() => setActiveTab('hours')}
+                  className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-2 border-purple-500/40 rounded-2xl p-6 cursor-pointer hover:border-purple-500/80 hover:shadow-2xl hover:shadow-purple-500/20 transition-all"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+                      <Clock className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white">Restaurant Hours</h3>
+                      <p className="text-gray-400 text-sm">Set operating hours</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  onClick={() => setActiveTab('menu-pdf')}
+                  className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-2 border-green-500/40 rounded-2xl p-6 cursor-pointer hover:border-green-500/80 hover:shadow-2xl hover:shadow-green-500/20 transition-all"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white">Menu PDF</h3>
+                      <p className="text-gray-400 text-sm">Upload menu PDF</p>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </div>
           )}
