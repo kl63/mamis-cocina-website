@@ -324,84 +324,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Store Info Section */}
-      <section className="py-12 bg-gradient-to-b from-black via-gray-900 to-black">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-8"
-          >
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
-              Visit Us Today
-            </h2>
-            <p className="text-lg text-gray-400">Come experience authentic Mexican cuisine</p>
-          </motion.div>
-
-          <div className="space-y-6">
-            {/* Phone - Featured at top */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-xl p-6 text-center hover:border-orange-500/80 transition-all max-w-md mx-auto"
-            >
-              <Phone className="w-12 h-12 text-orange-500 mx-auto mb-3" />
-              <h3 className="text-2xl font-black text-white mb-2">Call to Order</h3>
-              <a href="tel:+19089376927" className="text-xl font-bold text-orange-400 hover:text-orange-300 transition-colors">
-                (908) 937-6927
-              </a>
-            </motion.div>
-
-            {/* Location and Hours side by side */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Address */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-500/20 rounded-xl p-6 text-center hover:border-orange-500/60 transition-all"
-              >
-                <MapPin className="w-10 h-10 text-orange-500 mx-auto mb-3" />
-                <h3 className="text-xl font-bold text-white mb-3">Location</h3>
-                <p className="text-gray-300">449 N Wood Ave</p>
-                <p className="text-gray-300">Linden, NJ 07036</p>
-              </motion.div>
-
-              {/* Hours */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-500/20 rounded-xl p-6 text-center hover:border-orange-500/60 transition-all"
-              >
-                <Clock className="w-10 h-10 text-orange-500 mx-auto mb-3" />
-                <h3 className="text-xl font-bold text-white mb-3">Hours</h3>
-                <div className="space-y-0.5">
-                  {hours.length > 0 ? (
-                    hours.map((hour) => (
-                      <p key={hour.day} className="text-gray-300 text-xs">
-                        <span className="font-medium">{hour.day}:</span>{' '}
-                        {hour.is_closed ? 'Closed' : `${formatTime(hour.open_time)} - ${formatTime(hour.close_time)}`}
-                      </p>
-                    ))
-                  ) : (
-                    <p className="text-gray-400 text-sm">Loading hours...</p>
-                  )}
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Order Online Section */}
-      <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black">
+      {/* Visit & Order Section */}
+      <section className="py-16 bg-gradient-to-b from-gray-900 via-black to-gray-900">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -411,88 +335,129 @@ export default function Home() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4">
-              Order Online
+              Visit & Order
             </h2>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Order delivery through our partners or call us for pickup
-            </p>
+            <p className="text-lg text-gray-400">Visit us in person or order through our delivery partners</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Delivery Platforms */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Phone */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-8"
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-xl p-6 text-center hover:border-orange-500/80 transition-all"
             >
-              <h3 className="text-2xl font-black text-white mb-6 text-center">Delivery Apps</h3>
-              <div className="space-y-4">
-                <a
-                  href="#"
-                  className="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
-                >
-                  <div className="w-14 h-14 flex-shrink-0 relative">
-                    <Image
-                      src="/doordash.png"
-                      alt="DoorDash"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">DoorDash</span>
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
-                >
-                  <div className="w-14 h-14 flex-shrink-0 relative">
-                    <Image
-                      src="/uber_eats.jpeg"
-                      alt="Uber Eats"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Uber Eats</span>
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
-                >
-                  <div className="w-14 h-14 flex-shrink-0 relative">
-                    <Image
-                      src="/grubhub.png"
-                      alt="Grubhub"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Grubhub</span>
-                </a>
+              <Phone className="w-12 h-12 text-orange-500 mx-auto mb-3" />
+              <h3 className="text-xl font-bold text-white mb-2">Call Us</h3>
+              <a href="tel:+19089376927" className="text-lg font-bold text-orange-400 hover:text-orange-300 transition-colors">
+                (908) 937-6927
+              </a>
+              <p className="text-xs text-gray-400 mt-2">For pickup</p>
+            </motion.div>
+
+            {/* Address */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-500/20 rounded-xl p-6 text-center hover:border-orange-500/60 transition-all"
+            >
+              <MapPin className="w-12 h-12 text-orange-500 mx-auto mb-3" />
+              <h3 className="text-xl font-bold text-white mb-2">Location</h3>
+              <p className="text-gray-300 text-sm">449 N Wood Ave</p>
+              <p className="text-gray-300 text-sm">Linden, NJ 07036</p>
+            </motion.div>
+
+            {/* Hours */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-500/20 rounded-xl p-6 text-center hover:border-orange-500/60 transition-all"
+            >
+              <Clock className="w-12 h-12 text-orange-500 mx-auto mb-3" />
+              <h3 className="text-xl font-bold text-white mb-2">Hours</h3>
+              <div className="space-y-0.5">
+                {hours.length > 0 ? (
+                  hours.slice(0, 3).map((hour) => (
+                    <p key={hour.day} className="text-gray-300 text-xs">
+                      <span className="font-medium">{hour.day}:</span>{' '}
+                      {hour.is_closed ? 'Closed' : `${formatTime(hour.open_time)} - ${formatTime(hour.close_time)}`}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm">Loading hours...</p>
+                )}
               </div>
             </motion.div>
 
-            {/* Call to Order */}
+            {/* Delivery Apps */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-8 flex flex-col items-center justify-center text-center"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-500/20 rounded-xl p-6 text-center hover:border-orange-500/60 transition-all"
             >
-              <Phone className="w-16 h-16 text-orange-500 mb-4" />
-              <h3 className="text-2xl font-black text-white mb-2">Call for Pickup</h3>
-              <p className="text-gray-300 mb-6">Order ahead and pick up at the restaurant</p>
-              <a
-                href="tel:+19089376927"
-                className="text-3xl font-black text-orange-500 hover:text-orange-400 transition-colors"
-              >
-                (908) 937-6927
-              </a>
+              <div className="flex justify-center gap-2 mb-3">
+                <div className="w-8 h-8 relative">
+                  <Image src="/doordash.png" alt="DoorDash" fill className="object-contain" />
+                </div>
+                <div className="w-8 h-8 relative">
+                  <Image src="/uber_eats.jpeg" alt="Uber Eats" fill className="object-contain" />
+                </div>
+                <div className="w-8 h-8 relative">
+                  <Image src="/grubhub.png" alt="Grubhub" fill className="object-contain" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Delivery</h3>
+              <p className="text-gray-300 text-xs">Order via apps</p>
             </motion.div>
           </div>
+
+          {/* Full Delivery Apps List */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mt-8 bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-8 max-w-2xl mx-auto"
+          >
+            <h3 className="text-2xl font-black text-white mb-6 text-center">Order Delivery</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <a
+                href="#"
+                className="flex flex-col items-center gap-3 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
+              >
+                <div className="w-16 h-16 relative">
+                  <Image src="/doordash.png" alt="DoorDash" fill className="object-contain" />
+                </div>
+                <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">DoorDash</span>
+              </a>
+              <a
+                href="#"
+                className="flex flex-col items-center gap-3 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
+              >
+                <div className="w-16 h-16 relative">
+                  <Image src="/uber_eats.jpeg" alt="Uber Eats" fill className="object-contain" />
+                </div>
+                <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Uber Eats</span>
+              </a>
+              <a
+                href="#"
+                className="flex flex-col items-center gap-3 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
+              >
+                <div className="w-16 h-16 relative">
+                  <Image src="/grubhub.png" alt="Grubhub" fill className="object-contain" />
+                </div>
+                <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Grubhub</span>
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
 
