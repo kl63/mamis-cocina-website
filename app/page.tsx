@@ -340,7 +340,7 @@ export default function Home() {
             <p className="text-lg text-gray-400">Visit us in person or order through our delivery partners</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Phone */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -393,29 +393,6 @@ export default function Home() {
                   <p className="text-gray-400 text-sm">Loading hours...</p>
                 )}
               </div>
-            </motion.div>
-
-            {/* Delivery Apps */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-orange-500/20 rounded-xl p-6 text-center hover:border-orange-500/60 transition-all"
-            >
-              <div className="flex justify-center gap-2 mb-3">
-                <div className="w-8 h-8 relative">
-                  <Image src="/doordash.png" alt="DoorDash" fill className="object-contain" />
-                </div>
-                <div className="w-8 h-8 relative">
-                  <Image src="/uber_eats.jpeg" alt="Uber Eats" fill className="object-contain" />
-                </div>
-                <div className="w-8 h-8 relative">
-                  <Image src="/grubhub.png" alt="Grubhub" fill className="object-contain" />
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Delivery</h3>
-              <p className="text-gray-300 text-xs">Order via apps</p>
             </motion.div>
           </div>
 
