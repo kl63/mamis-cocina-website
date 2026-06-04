@@ -294,10 +294,6 @@ export default function Home() {
                         <span className="text-3xl font-black text-orange-500">${item.price.toFixed(2)}</span>
                       </div>
                       <p className="text-gray-400 text-base">{item.description}</p>
-                      
-                      <Button className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-base py-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
-                        View Details
-                      </Button>
                     </div>
                   </div>
                 </Link>

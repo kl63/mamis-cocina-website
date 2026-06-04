@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { Search, Flame, Star } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
@@ -116,6 +115,28 @@ export default function MenuPage() {
             <p className="text-sm md:text-base text-yellow-400/90 max-w-2xl mx-auto bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-4 py-2">
               ⚠️ Menu prices are subject to change. Please ask for current pricing. Thanks!
             </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Menu PDF Download Section */}
+      <section className="py-12 bg-gradient-to-b from-black via-gray-900 to-black">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-8 text-center"
+          >
+            <h2 className="text-2xl md:text-3xl font-black text-white mb-4">View Our Full Menu</h2>
+            <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">Download our complete menu to see all our delicious offerings</p>
+            <a
+              href="/menu.pdf"
+              download="Mamis-Cocina-Menu.pdf"
+              className="inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+            >
+              Download Menu PDF
+            </a>
           </motion.div>
         </div>
       </section>
@@ -236,9 +257,6 @@ export default function MenuPage() {
                         <span className="text-3xl font-black text-orange-500">
                           ${item.price.toFixed(2)}
                         </span>
-                        <Button className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold px-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
-                          View Details
-                        </Button>
                       </div>
                     </div>
                   </div>
