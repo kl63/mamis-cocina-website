@@ -1032,7 +1032,7 @@ export default function AdminPage() {
                   {/* Check if menu.pdf exists */}
                   <div className="flex items-center gap-4 mb-6">
                     <a 
-                      href="/menu.pdf" 
+                      href="/api/menu-pdf" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-orange-500 hover:text-orange-400 underline"

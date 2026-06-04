@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
 import { createClient } from '@/lib/supabase/server'
 
 export async function POST(request: NextRequest) {
@@ -47,14 +45,32 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    // Save to public directory
-    const publicPath = join(process.cwd(), 'public', 'menu.pdf')
-    await writeFile(publicPath, buffer)
+    // Upload to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from('menu-pdfs')
+      .upload('menu.pdf', buffer, {
+        contentType: 'application/pdf',
+        upsert: true
+      })
+
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError)
+      return NextResponse.json({ 
+        error: 'Failed to upload to storage',
+        details: uploadError.message
+      }, { status: 500 })
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('menu-pdfs')
+      .getPublicUrl('menu.pdf')
 
     return NextResponse.json({ 
       success: true, 
       message: 'Menu PDF uploaded successfully',
-      filename: 'menu.pdf'
+      filename: 'menu.pdf',
+      url: publicUrl
     })
   } catch (error) {
     console.error('Error uploading menu PDF:', error)

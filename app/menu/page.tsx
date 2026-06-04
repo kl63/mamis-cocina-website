@@ -131,7 +131,7 @@ export default function MenuPage() {
             <h2 className="text-xl md:text-2xl font-black text-white mb-2">View Our Full Menu</h2>
             <p className="text-sm text-gray-300 mb-4 max-w-2xl mx-auto">Download our complete menu to see all our delicious offerings</p>
             <a
-              href="/menu.pdf"
+              href="/api/menu-pdf"
               download="Mamis-Cocina-Menu.pdf"
               className="inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
             >
