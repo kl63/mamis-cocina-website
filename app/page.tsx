@@ -435,19 +435,19 @@ export default function Home() {
       </section>
 
       {/* Menu PDF Section */}
-      <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black">
+      <section className="py-12 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-8 lg:p-12 text-center"
+            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-6 lg:p-8 text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">
               View Our Full Menu
             </h2>
-            <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-base text-gray-300 mb-6 max-w-2xl mx-auto">
               Download our complete menu to see all our delicious offerings
             </p>
             <Button 

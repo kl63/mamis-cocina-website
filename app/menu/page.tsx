@@ -120,16 +120,16 @@ export default function MenuPage() {
       </section>
 
       {/* Menu PDF Download Section */}
-      <section className="py-12 bg-gradient-to-b from-black via-gray-900 to-black">
+      <section className="py-10 bg-gradient-to-b from-black via-gray-900 to-black">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-8 text-center"
+            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-5 lg:p-6 text-center"
           >
-            <h2 className="text-2xl md:text-3xl font-black text-white mb-4">View Our Full Menu</h2>
-            <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">Download our complete menu to see all our delicious offerings</p>
+            <h2 className="text-xl md:text-2xl font-black text-white mb-2">View Our Full Menu</h2>
+            <p className="text-sm text-gray-300 mb-4 max-w-2xl mx-auto">Download our complete menu to see all our delicious offerings</p>
             <a
               href="/menu.pdf"
               download="Mamis-Cocina-Menu.pdf"
