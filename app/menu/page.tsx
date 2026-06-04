@@ -199,10 +199,10 @@ export default function MenuPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                  className="group relative"
+                  className="group relative h-full"
                 >
-                  <Link href={`/menu/${item.id}`} className="block">
-                    <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-2xl overflow-hidden hover:border-orange-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 cursor-pointer">
+                  <Link href={`/menu/${item.id}`} className="block h-full">
+                    <div className="h-full bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-2xl overflow-hidden hover:border-orange-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 cursor-pointer flex flex-col">
                     {/* Popular Badge */}
                     {item.is_popular && (
                       <div className="absolute top-4 right-4 bg-gradient-to-r from-orange-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10 shadow-lg flex items-center gap-1">
