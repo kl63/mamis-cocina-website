@@ -58,18 +58,33 @@ export default function Home() {
           setHours(fetchedHours)
         }
 
-        // Calculate if restaurant is open based on current day and time
-        const currentDate = new Date()
-        const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'long' })
-        const currentTime = currentDate.toTimeString().slice(0, 5) // HH:MM format
+        // Calculate if restaurant is open based on current day and time in New Jersey timezone
+        // Restaurant is in Linden, NJ (America/New_York timezone)
+        const njTime = new Date().toLocaleString('en-US', { 
+          timeZone: 'America/New_York',
+          hour12: false 
+        })
+        const njDate = new Date(njTime)
+        const currentDay = njDate.toLocaleDateString('en-US', { 
+          weekday: 'long',
+          timeZone: 'America/New_York'
+        })
+        const currentTime = njDate.toTimeString().slice(0, 5) // HH:MM format
+        
+        console.log('🕐 Current NJ time:', currentTime, 'Day:', currentDay)
         
         const todayHours = fetchedHours?.find((h: RestaurantHours) => h.day === currentDay)
         
+        console.log('📅 Today\'s hours:', todayHours)
+        
         if (todayHours && !todayHours.is_closed) {
           // Check if current time is within operating hours
-          const isCurrentlyOpen = currentTime >= todayHours.open_time && currentTime <= todayHours.close_time
+          // Use < instead of <= for close_time because close_time is when they stop accepting orders
+          const isCurrentlyOpen = currentTime >= todayHours.open_time && currentTime < todayHours.close_time
+          console.log('✅ Is open?', isCurrentlyOpen, `(${todayHours.open_time} - ${todayHours.close_time})`)
           setIsOpen(isCurrentlyOpen)
         } else {
+          console.log('❌ Closed today or no hours found')
           setIsOpen(false)
         }
       } catch (error) {
@@ -381,6 +396,102 @@ export default function Home() {
                 </div>
               </motion.div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Order Online Section */}
+      <section className="py-16 bg-gradient-to-b from-black via-gray-900 to-black">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4">
+              Order Online
+            </h2>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Order delivery through our partners or call us for pickup
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Delivery Platforms */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-8"
+            >
+              <h3 className="text-2xl font-black text-white mb-6 text-center">Delivery Apps</h3>
+              <div className="space-y-4">
+                <a
+                  href="#"
+                  className="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
+                >
+                  <div className="w-14 h-14 flex-shrink-0 relative">
+                    <Image
+                      src="/doordash.png"
+                      alt="DoorDash"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">DoorDash</span>
+                </a>
+                <a
+                  href="#"
+                  className="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
+                >
+                  <div className="w-14 h-14 flex-shrink-0 relative">
+                    <Image
+                      src="/uber_eats.jpeg"
+                      alt="Uber Eats"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Uber Eats</span>
+                </a>
+                <a
+                  href="#"
+                  className="flex items-center gap-4 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
+                >
+                  <div className="w-14 h-14 flex-shrink-0 relative">
+                    <Image
+                      src="/grubhub.png"
+                      alt="Grubhub"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Grubhub</span>
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Call to Order */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-8 flex flex-col items-center justify-center text-center"
+            >
+              <Phone className="w-16 h-16 text-orange-500 mb-4" />
+              <h3 className="text-2xl font-black text-white mb-2">Call for Pickup</h3>
+              <p className="text-gray-300 mb-6">Order ahead and pick up at the restaurant</p>
+              <a
+                href="tel:+19089376927"
+                className="text-3xl font-black text-orange-500 hover:text-orange-400 transition-colors"
+              >
+                (908) 937-6927
+              </a>
+            </motion.div>
           </div>
         </div>
       </section>

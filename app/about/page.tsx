@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Flame, Heart, Users, Award, Zap, Target } from 'lucide-react'
+import { Flame, Heart, Target } from 'lucide-react'
 import Image from 'next/image'
 
 export default function AboutPage() {
@@ -56,37 +56,6 @@ export default function AboutPage() {
               Bringing generations of Mexican culinary tradition to your table with love and authenticity
             </p>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="bg-gradient-to-b from-gray-900 via-black to-gray-900 py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            {[
-              { number: '25K+', label: 'Happy Customers', icon: Users },
-              { number: '100%', label: 'Handmade Tortillas', icon: Heart },
-              { number: '20min', label: 'Avg Delivery Time', icon: Zap },
-              { number: '4.8★', label: 'Customer Rating', icon: Award },
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500/20 to-yellow-600/20 border-2 border-red-500/30 rounded-2xl mb-4">
-                  <stat.icon className="w-8 h-8 text-red-500" />
-                </div>
-                <div className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-red-400 to-yellow-500 bg-clip-text text-transparent mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-sm md:text-base text-gray-400 font-medium">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 

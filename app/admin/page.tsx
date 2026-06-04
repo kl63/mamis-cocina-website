@@ -14,7 +14,9 @@ import {
   Package,
   Loader2,
   Clock,
-  Menu
+  Menu,
+  FileText,
+  Upload
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
@@ -504,20 +506,16 @@ export default function AdminPage() {
 
       <div className="flex">
         {/* Sidebar */}
-        <motion.aside
-          initial={false}
-          animate={{ 
-            x: mobileMenuOpen ? 0 : -300,
-            display: mobileMenuOpen ? 'block' : 'none'
-          }}
-          transition={{ duration: 0.3 }}
-          className="fixed lg:relative lg:!block lg:!translate-x-0 w-64 min-h-screen bg-gradient-to-b from-gray-900 to-black border-r border-orange-500/20 p-6 z-40"
+        <aside
+          className={`fixed lg:static w-64 min-h-screen bg-gradient-to-b from-gray-900 to-black border-r border-orange-500/20 p-6 z-40 transition-transform duration-300 ${
+            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          }`}
         >
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h1 className="text-2xl font-black text-white mb-2">Admin Panel</h1>
-                <p className="text-gray-400 text-sm">ByteBurger Dashboard</p>
+                <p className="text-gray-400 text-sm">Mami&apos;s Cocina</p>
               </div>
               {/* Close button for mobile */}
               <Button
@@ -553,6 +551,7 @@ export default function AdminPage() {
               { id: 'menu', label: 'Menu Items', icon: MenuSquare },
               { id: 'categories', label: 'Categories', icon: Package },
               { id: 'hours', label: 'Restaurant Hours', icon: Clock },
+              { id: 'menu-pdf', label: 'Menu PDF', icon: FileText },
               // Analytics disabled for Mami's Cocina
               // { id: 'analytics', label: 'Analytics', icon: TrendingUp },
             ].map((item) => (
@@ -575,7 +574,7 @@ export default function AdminPage() {
             
             {/* Kitchen and Kiosk disabled for Mami's Cocina */}
           </nav>
-        </motion.aside>
+        </aside>
 
         {/* Main Content */}
         <div className="flex-1 p-4 lg:p-8 w-full lg:w-auto pt-16 lg:pt-8">
@@ -918,6 +917,102 @@ export default function AdminPage() {
           {/* Restaurant Hours Tab */}
           {activeTab === 'hours' && (
             <RestaurantHours />
+          )}
+
+          {/* Menu PDF Tab */}
+          {activeTab === 'menu-pdf' && (
+            <div>
+              <h2 className="text-2xl lg:text-3xl font-black text-white mb-6 lg:mb-8">Menu PDF Upload</h2>
+              
+              <div className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 lg:p-8">
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-white mb-2">Current Menu PDF</h3>
+                  <p className="text-gray-400 text-sm mb-4">
+                    Upload a PDF file that customers can download from the homepage
+                  </p>
+                  
+                  {/* Check if menu.pdf exists */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <a 
+                      href="/menu.pdf" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-orange-500 hover:text-orange-400 underline"
+                    >
+                      View Current Menu PDF
+                    </a>
+                  </div>
+                </div>
+
+                {/* Upload Form */}
+                <div className="border-2 border-dashed border-gray-700 rounded-xl p-8 text-center hover:border-orange-500/50 transition-colors">
+                  <Upload className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+                  <h4 className="text-lg font-bold text-white mb-2">Upload New Menu PDF</h4>
+                  <p className="text-gray-400 text-sm mb-4">
+                    Drag and drop your PDF file here, or click to browse
+                  </p>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        if (file.type !== 'application/pdf') {
+                          alert('Please upload a PDF file')
+                          return
+                        }
+                        // Handle file upload
+                        const formData = new FormData()
+                        formData.append('file', file)
+                        
+                        fetch('/api/upload-menu-pdf', {
+                          method: 'POST',
+                          body: formData
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                          if (data.success) {
+                            alert('Menu PDF uploaded successfully!')
+                          } else {
+                            alert('Error uploading PDF: ' + (data.error || 'Unknown error'))
+                          }
+                        })
+                        .catch(err => {
+                          console.error('Upload error:', err)
+                          alert('Error uploading PDF')
+                        })
+                      }
+                    }}
+                    className="hidden"
+                    id="pdf-upload"
+                  />
+                  <label htmlFor="pdf-upload">
+                    <Button 
+                      type="button"
+                      className="bg-gradient-to-r from-orange-500 to-red-600 text-white cursor-pointer"
+                      onClick={() => document.getElementById('pdf-upload')?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      Choose PDF File
+                    </Button>
+                  </label>
+                  <p className="text-xs text-gray-500 mt-4">
+                    Maximum file size: 10MB
+                  </p>
+                </div>
+
+                {/* Instructions */}
+                <div className="mt-6 bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                  <h4 className="text-sm font-bold text-blue-400 mb-2">📝 Instructions</h4>
+                  <ul className="text-sm text-gray-300 space-y-1">
+                    <li>• Upload your menu as a PDF file</li>
+                    <li>• The file will be saved as <code className="bg-gray-900 px-1 rounded">menu.pdf</code></li>
+                    <li>• Customers can download it from the &ldquo;View Our Full Menu&rdquo; section on the homepage</li>
+                    <li>• Make sure the PDF is clear and readable on mobile devices</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Analytics Tab */}
