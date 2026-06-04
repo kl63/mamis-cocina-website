@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,59 +45,35 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    // Try Supabase Storage first
-    try {
-      const { error: uploadError } = await supabase.storage
-        .from('menu-pdfs')
-        .upload('menu.pdf', buffer, {
-          contentType: 'application/pdf',
-          upsert: true
-        })
-
-      if (uploadError) {
-        console.error('Supabase upload error:', uploadError)
-        console.error('Error details:', JSON.stringify(uploadError, null, 2))
-        throw uploadError
-      }
-
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('menu-pdfs')
-        .getPublicUrl('menu.pdf')
-
-      return NextResponse.json({ 
-        success: true, 
-        message: 'Menu PDF uploaded successfully to Supabase Storage',
-        filename: 'menu.pdf',
-        url: publicUrl,
-        storage: 'supabase'
+    // Upload to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from('menu-pdfs')
+      .upload('menu.pdf', buffer, {
+        contentType: 'application/pdf',
+        upsert: true
       })
-    } catch (supabaseError) {
-      console.warn('Supabase Storage failed, falling back to public folder:', supabaseError)
-      
-      // Fallback to public folder (works locally)
-      try {
-        const publicPath = join(process.cwd(), 'public', 'menu.pdf')
-        await writeFile(publicPath, buffer)
-        
-        return NextResponse.json({ 
-          success: true, 
-          message: 'Menu PDF uploaded successfully to public folder',
-          filename: 'menu.pdf',
-          url: '/menu.pdf',
-          storage: 'public',
-          warning: 'Using public folder fallback (Supabase Storage unavailable)'
-        })
-      } catch (fsError) {
-        console.error('File system fallback also failed:', fsError)
-        return NextResponse.json({ 
-          error: 'Failed to upload PDF',
-          details: 'Both Supabase Storage and file system failed',
-          supabaseError: supabaseError instanceof Error ? supabaseError.message : 'Unknown',
-          fsError: fsError instanceof Error ? fsError.message : 'Unknown'
-        }, { status: 500 })
-      }
+
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError)
+      console.error('Error details:', JSON.stringify(uploadError, null, 2))
+      return NextResponse.json({ 
+        error: 'Failed to upload to Supabase Storage',
+        details: uploadError.message,
+        fullError: uploadError
+      }, { status: 500 })
     }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('menu-pdfs')
+      .getPublicUrl('menu.pdf')
+
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Menu PDF uploaded successfully',
+      filename: 'menu.pdf',
+      url: publicUrl
+    })
   } catch (error) {
     console.error('Error uploading menu PDF:', error)
     return NextResponse.json({ 
