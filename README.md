@@ -1,4 +1,4 @@
-# Mami's Cocina �
+# Mami's Cocina 🌮
 
 A modern restaurant website for Mami's Cocina featuring a customer-facing homepage, menu display, and admin dashboard for content management.
 
