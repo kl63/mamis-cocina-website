@@ -15,7 +15,6 @@ import {
   Package,
   Loader2,
   Clock,
-  Menu,
   FileText,
   Upload
 } from 'lucide-react'
@@ -143,7 +142,6 @@ export default function AdminPage() {
   const [peakHoursData, setPeakHoursData] = useState<any[]>([])
   const [analyticsLoading, setAnalyticsLoading] = useState(false)
   const [timeRange, setTimeRange] = useState<7 | 30 | 90>(7)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Data loading function
   const loadData = useCallback(async () => {
@@ -493,24 +491,10 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-black to-gray-900">
-      {/* Mobile Menu Toggle */}
-      <div className="lg:hidden fixed top-20 left-0 right-0 z-50 px-4">
-        <Button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg"
-          size="sm"
-        >
-          <Menu className="w-4 h-4 mr-2" />
-          Menu
-        </Button>
-      </div>
-
       <div className="flex">
         {/* Sidebar - Hidden since navigation is on dashboard */}
         <aside
-          className={`hidden fixed lg:static w-64 min-h-screen bg-gradient-to-b from-gray-900 to-black border-r border-orange-500/20 p-6 z-40 transition-transform duration-300 ${
-            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-          }`}
+          className="hidden fixed lg:static w-64 min-h-screen bg-gradient-to-b from-gray-900 to-black border-r border-orange-500/20 p-6 z-40 transition-transform duration-300"
         >
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
@@ -518,15 +502,6 @@ export default function AdminPage() {
                 <h1 className="text-2xl font-black text-white mb-2">Admin Panel</h1>
                 <p className="text-gray-400 text-sm">Mami&apos;s Cocina</p>
               </div>
-              {/* Close button for mobile */}
-              <Button
-                onClick={() => setMobileMenuOpen(false)}
-                variant="ghost"
-                size="sm"
-                className="lg:hidden text-white hover:bg-white/10"
-              >
-                ✕
-              </Button>
             </div>
             
             {/* Admin User Info */}
@@ -543,38 +518,6 @@ export default function AdminPage() {
               </span>
             </div>
           </div>
-
-          <nav className="space-y-2">
-            {[
-              { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-              // Orders disabled for Mami's Cocina
-              // { id: 'orders', label: 'Orders', icon: ShoppingBag },
-              { id: 'menu', label: 'Menu Items', icon: MenuSquare },
-              { id: 'categories', label: 'Categories', icon: Package },
-              { id: 'hours', label: 'Restaurant Hours', icon: Clock },
-              { id: 'menu-pdf', label: 'Menu PDF', icon: FileText },
-              // Analytics disabled for Mami's Cocina
-              // { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id)
-                  setMobileMenuOpen(false)
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                  activeTab === item.id
-                    ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg'
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                }`}
-              >
-                <item.icon className="w-5 h-5" />
-                <span className="font-bold">{item.label}</span>
-              </button>
-            ))}
-            
-            {/* Kitchen and Kiosk disabled for Mami's Cocina */}
-          </nav>
         </aside>
 
         {/* Main Content */}
