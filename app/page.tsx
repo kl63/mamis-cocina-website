@@ -403,7 +403,9 @@ export default function Home() {
             <h3 className="text-2xl font-black text-white mb-6 text-center">Order Delivery</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <a
-                href="#"
+                href="https://www.doordash.com/store/mami's-cocina-linden-24308030/17317546/?srsltid=AfmBOopVllBPPKV5qtyFLuA6NixuTiFRKCCwSiwXSz7sQYQ4y5C-VVdC"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex flex-col items-center gap-3 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
               >
                 <div className="w-16 h-16 relative">
@@ -412,7 +414,9 @@ export default function Home() {
                 <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">DoorDash</span>
               </a>
               <a
-                href="#"
+                href="https://www.ubereats.com/store/mamis-cocina-mexican-food/rCY4v4F3TWaxcvg1jhcChA"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex flex-col items-center gap-3 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
               >
                 <div className="w-16 h-16 relative">
@@ -421,7 +425,9 @@ export default function Home() {
                 <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Uber Eats</span>
               </a>
               <a
-                href="#"
+                href="https://www.grubhub.com/restaurant/mamis-cocina-449-n-wood-ave-linden/3035604"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex flex-col items-center gap-3 p-4 bg-gray-900/50 rounded-xl hover:bg-orange-500/10 hover:border-orange-500/50 border-2 border-transparent transition-all group"
               >
                 <div className="w-16 h-16 relative">
