@@ -273,6 +273,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Menu PDF Section */}
+      <section className="py-12 bg-gradient-to-b from-black via-gray-900 to-black">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-6 lg:p-8 text-center"
+          >
+            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">
+              View Our Full Menu
+            </h2>
+            <p className="text-base text-gray-300 mb-6 max-w-2xl mx-auto">
+              Download our complete menu to see all our delicious offerings
+            </p>
+            <Button 
+              asChild 
+              className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black text-lg px-10 py-6 rounded-full shadow-2xl hover:scale-110 transition-all"
+            >
+              <a href="/api/menu-pdf" download="Mamis-Cocina-Menu.pdf">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download Menu PDF
+              </a>
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Visit & Order Section */}
       <section className="py-16 bg-gradient-to-b from-gray-900 via-black to-gray-900">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -389,37 +420,6 @@ export default function Home() {
                 <span className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Grubhub</span>
               </a>
             </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Menu PDF Section */}
-      <section className="py-12 bg-gradient-to-b from-black via-gray-900 to-black">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-6 lg:p-8 text-center"
-          >
-            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">
-              View Our Full Menu
-            </h2>
-            <p className="text-base text-gray-300 mb-6 max-w-2xl mx-auto">
-              Download our complete menu to see all our delicious offerings
-            </p>
-            <Button 
-              asChild 
-              className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black text-lg px-10 py-6 rounded-full shadow-2xl hover:scale-110 transition-all"
-            >
-              <a href="/api/menu-pdf" download="Mamis-Cocina-Menu.pdf">
-                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Download Menu PDF
-              </a>
-            </Button>
           </motion.div>
         </div>
       </section>
@@ -545,7 +545,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-tight"
             >
-              ¿Listo Para <br className="hidden md:block" />
+              Listo Para <br className="hidden md:block" />
               Sabor Auténtico?
             </motion.h2>
 
