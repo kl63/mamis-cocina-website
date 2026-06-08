@@ -255,49 +255,31 @@ export default function Home() {
           </div>
           )}
 
-          {/* View Full Menu Button */}
+          {/* Menu Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.5 }}
-            className="text-center mt-12"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12"
           >
-            <Button asChild size="lg" variant="outline" className="!text-white border-2 border-orange-500 hover:bg-orange-500 hover:!text-white text-lg px-8 py-6 bg-transparent">
+            <Button asChild size="lg" variant="outline" className="!text-white border-2 border-orange-500 hover:bg-orange-500 hover:!text-white text-lg px-8 py-6 bg-transparent w-full sm:w-auto">
               <Link href="/menu">
                 View Full Menu
                 <ChevronRight className="ml-2" />
               </Link>
             </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Menu PDF Section */}
-      <section className="py-12 bg-gradient-to-b from-black via-gray-900 to-black">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/40 rounded-2xl p-6 lg:p-8 text-center"
-          >
-            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">
-              View Our Full Menu
-            </h2>
-            <p className="text-base text-gray-300 mb-6 max-w-2xl mx-auto">
-              Download our complete menu to see all our delicious offerings
-            </p>
+            
             <Button 
               asChild 
-              className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black text-lg px-10 py-6 rounded-full shadow-2xl hover:scale-110 transition-all"
+              size="lg"
+              className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-lg px-8 py-6 w-full sm:w-auto"
             >
-              <a href="/api/menu-pdf" download="Mamis-Cocina-Menu.pdf">
-                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <a href="/api/menu-pdf" download="Mamis-Cocina-Menu.pdf" className="flex items-center justify-center">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Download Menu PDF
+                Download Menu
               </a>
             </Button>
           </motion.div>
