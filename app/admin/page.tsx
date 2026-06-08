@@ -118,7 +118,8 @@ export default function AdminPage() {
     category_id: '',
     calories: 0,
     is_popular: false,
-    image_url: '🍔',
+    is_spicy: false,
+    image_url: '/mamis_cocina_logo.png',
   })
   const [uploadingImage, setUploadingImage] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -315,6 +316,7 @@ export default function AdminPage() {
         category_id: newItem.category_id || undefined,
         calories: newItem.calories || undefined,
         is_popular: newItem.is_popular,
+        is_spicy: newItem.is_spicy,
         image_url: imageUrl,
       })
       
@@ -333,7 +335,8 @@ export default function AdminPage() {
         category_id: '',
         calories: 0,
         is_popular: false,
-        image_url: '🍔',
+        is_spicy: false,
+        image_url: '/mamis_cocina_logo.png',
       })
       setSelectedFile(null)
       setImagePreview(null)
@@ -1529,7 +1532,7 @@ export default function AdminPage() {
                       onClick={() => {
                         setSelectedFile(null)
                         setImagePreview(null)
-                        setNewItem({ ...newItem, image_url: '🍔' })
+                        setNewItem({ ...newItem, image_url: '/mamis_cocina_logo.png' })
                       }}
                       className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
                     >
@@ -1587,15 +1590,30 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="is_popular_new"
-                  checked={newItem.is_popular}
-                  onChange={(e) => setNewItem({ ...newItem, is_popular: e.target.checked })}
-                  className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
-                />
-                <label htmlFor="is_popular_new" className="text-sm text-gray-300">Mark as Popular</label>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_popular_new"
+                    checked={newItem.is_popular}
+                    onChange={(e) => setNewItem({ ...newItem, is_popular: e.target.checked })}
+                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
+                  />
+                  <label htmlFor="is_popular_new" className="text-sm text-gray-300">Mark as Popular</label>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_spicy_new"
+                    checked={newItem.is_spicy || false}
+                    onChange={(e) => setNewItem({ ...newItem, is_spicy: e.target.checked })}
+                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
+                  />
+                  <label htmlFor="is_spicy_new" className="text-sm text-gray-300 flex items-center gap-1">
+                    Mark as Spicy 🌶️
+                  </label>
+                </div>
               </div>
             </div>
 
@@ -1624,7 +1642,8 @@ export default function AdminPage() {
                     category_id: '',
                     calories: 0,
                     is_popular: false,
-                    image_url: '🍔',
+                    is_spicy: false,
+                    image_url: '/mamis_cocina_logo.png',
                   })
                 }}
                 variant="outline"

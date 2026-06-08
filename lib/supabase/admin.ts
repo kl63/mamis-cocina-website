@@ -160,10 +160,19 @@ export async function createMenuItem(item: {
   category_id?: string
   image_url?: string
   is_popular?: boolean
+  is_spicy?: boolean
   calories?: number
 }) {
   try {
     console.log('📝 Creating menu item:', item)
+    
+    // Map is_popular to is_featured for database compatibility
+    const { is_popular, ...rest } = item
+    const dbItem = {
+      ...rest,
+      is_featured: is_popular || false,
+      is_available: true // Set as available by default
+    }
     
     const headers = await getAuthHeaders()
     headers['Prefer'] = 'return=representation'
@@ -173,7 +182,7 @@ export async function createMenuItem(item: {
     const response = await fetch(url, {
       method: 'POST',
       headers,
-      body: JSON.stringify(item),
+      body: JSON.stringify(dbItem),
       signal: AbortSignal.timeout(5000)
     })
     

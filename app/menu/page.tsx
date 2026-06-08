@@ -148,6 +148,14 @@ export default function MenuPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col gap-6 mb-12"
           >
+            {/* Spicy Note */}
+            <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border-2 border-red-500/30 rounded-xl p-4 flex items-center gap-3">
+              <span className="text-3xl">🌶️</span>
+              <p className="text-sm text-gray-300">
+                <span className="font-bold text-white">Spicy Items:</span> Look for the chili pepper 🌶️ next to menu items that pack some heat!
+              </p>
+            </div>
+
             {/* Search Bar */}
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -247,7 +255,7 @@ export default function MenuPage() {
                               className="text-xl"
                               title="Spicy"
                             >
-                              🔥
+                              🌶️
                             </motion.span>
                           )}
                         </div>
