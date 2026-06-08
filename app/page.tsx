@@ -35,7 +35,6 @@ export default function Home() {
   const [popularItems, setPopularItems] = useState<MenuItem[]>([])
   const [hours, setHours] = useState<RestaurantHours[]>(cachedHours || [])
   const [loading, setLoading] = useState(true)
-  const [isOpen, setIsOpen] = useState(false)
 
   // Fetch popular items and hours on mount
   useEffect(() => {
@@ -58,38 +57,8 @@ export default function Home() {
           setHours(fetchedHours)
         }
 
-        // Calculate if restaurant is open based on current day and time in New Jersey timezone
-        // Restaurant is in Linden, NJ (America/New_York timezone)
-        const njTime = new Date().toLocaleString('en-US', { 
-          timeZone: 'America/New_York',
-          hour12: false 
-        })
-        const njDate = new Date(njTime)
-        const currentDay = njDate.toLocaleDateString('en-US', { 
-          weekday: 'long',
-          timeZone: 'America/New_York'
-        })
-        const currentTime = njDate.toTimeString().slice(0, 5) // HH:MM format
-        
-        console.log('🕐 Current NJ time:', currentTime, 'Day:', currentDay)
-        
-        const todayHours = fetchedHours?.find((h: RestaurantHours) => h.day === currentDay)
-        
-        console.log('📅 Today\'s hours:', todayHours)
-        
-        if (todayHours && !todayHours.is_closed) {
-          // Check if current time is within operating hours
-          // Use < instead of <= for close_time because close_time is when they stop accepting orders
-          const isCurrentlyOpen = currentTime >= todayHours.open_time && currentTime < todayHours.close_time
-          console.log('✅ Is open?', isCurrentlyOpen, `(${todayHours.open_time} - ${todayHours.close_time})`)
-          setIsOpen(isCurrentlyOpen)
-        } else {
-          console.log('❌ Closed today or no hours found')
-          setIsOpen(false)
-        }
       } catch (error) {
         console.error('Error fetching data:', error)
-        setIsOpen(false)
       } finally {
         setLoading(false)
       }
@@ -142,20 +111,6 @@ export default function Home() {
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className={`inline-block rounded-full px-6 py-3 text-base font-bold border-2 mb-8 ${
-                isOpen 
-                  ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 border-green-500/40' 
-                  : 'bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-400 border-red-500/40'
-              }`}
-            >
-              <Flame className="w-5 h-5 inline mr-2" />
-              {isOpen ? 'WE ARE OPEN' : 'CLOSED'}
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
