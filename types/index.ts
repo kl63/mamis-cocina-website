@@ -35,6 +35,7 @@ export interface MenuItem {
   is_available: boolean
   is_featured: boolean
   is_popular?: boolean // Legacy field for backwards compatibility
+  is_spicy?: boolean // Indicates if the item is spicy
   customization_options?: CustomizationOption[]
   created_at: string
   updated_at: string

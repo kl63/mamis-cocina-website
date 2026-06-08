@@ -3,7 +3,6 @@
 import { Search, Flame, Star } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import { getMenuItems, getCategories } from '@/lib/supabase/database'
 import type { MenuItem, MenuCategory } from '@/types'
 
@@ -191,34 +190,33 @@ export default function MenuPage() {
               <p className="text-xl text-gray-400">No items found matching your search</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex flex-col gap-4">
               {filteredItems.map((item, index) => (
                 <motion.div
                   key={item.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                  className="group relative h-full"
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  whileHover={{ x: 8, transition: { duration: 0.3 } }}
+                  className="group relative"
                 >
-                  <Link href={`/menu/${item.id}`} className="block h-full">
-                    <div className="h-full bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-2xl overflow-hidden hover:border-orange-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 cursor-pointer flex flex-col">
+                    <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-xl overflow-hidden hover:border-orange-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 flex flex-row items-center">
                     {/* Popular Badge */}
                     {item.is_popular && (
-                      <div className="absolute top-4 right-4 bg-gradient-to-r from-orange-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10 shadow-lg flex items-center gap-1">
+                      <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10 shadow-lg flex items-center gap-1">
                         <Star className="w-3 h-3 fill-current" />
                         Popular
                       </div>
                     )}
                     
                     {/* Image Area */}
-                    <div className="relative h-56 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
+                    <div className="relative w-32 h-32 flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
                       {item.image_url ? (
                         <motion.img
                           whileHover={{ scale: 1.1 }}
                           transition={{ duration: 0.4 }}
                           src={item.image_url.includes('unsplash.com') 
-                            ? `${item.image_url.split('?')[0]}?w=600&q=80&auto=format`
+                            ? `${item.image_url.split('?')[0]}?w=300&q=80&auto=format`
                             : item.image_url
                           }
                           alt={item.name}
@@ -229,38 +227,40 @@ export default function MenuPage() {
                         <motion.div
                           whileHover={{ scale: 1.2, rotate: 5 }}
                           transition={{ duration: 0.4 }}
-                          className="text-8xl filter drop-shadow-2xl"
+                          className="text-5xl filter drop-shadow-2xl"
                         >
-                          {categoryEmojis[item.category?.name || 'Tacos'] || '�'}
+                          {categoryEmojis[item.category?.name || 'Tacos'] || '🌮'}
                         </motion.div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                      
-                      {/* Flame effect */}
-                      <motion.div
-                        animate={{ opacity: [0.3, 0.7, 0.3], scale: [1, 1.1, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute bottom-3 right-3 text-3xl"
-                      >
-                        🔥
-                      </motion.div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/40" />
                     </div>
 
                     {/* Content */}
-                    <div className="p-6 space-y-4">
-                      <div>
-                        <h3 className="text-2xl font-black text-white mb-2">{item.name}</h3>
-                        <p className="text-gray-400 text-sm">{item.description}</p>
+                    <div className="flex-1 p-4 flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-xl font-black text-white">{item.name}</h3>
+                          {item.is_spicy && (
+                            <motion.span
+                              animate={{ opacity: [0.5, 1, 0.5] }}
+                              transition={{ duration: 2, repeat: Infinity }}
+                              className="text-xl"
+                              title="Spicy"
+                            >
+                              🔥
+                            </motion.span>
+                          )}
+                        </div>
+                        <p className="text-gray-400 text-sm line-clamp-2">{item.description}</p>
                       </div>
                       
-                      <div className="flex items-center justify-between pt-2">
-                        <span className="text-3xl font-black text-orange-500">
+                      <div className="flex items-center ml-4">
+                        <span className="text-2xl font-black text-orange-500">
                           ${item.price.toFixed(2)}
                         </span>
                       </div>
                     </div>
                   </div>
-                  </Link>
                 </motion.div>
               ))}
             </div>
