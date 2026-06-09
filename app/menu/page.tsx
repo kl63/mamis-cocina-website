@@ -172,7 +172,7 @@ export default function MenuPage() {
                 onClick={() => setSelectedCategory('All')}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                className={`px-4 py-2 rounded-lg font-bold transition-all text-sm ${
                   selectedCategory === 'All'
                     ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/50'
                     : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30'
@@ -188,15 +188,15 @@ export default function MenuPage() {
                   onClick={() => setSelectedCategory(category.name)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all flex flex-col items-center ${
+                  className={`px-4 py-2 rounded-lg font-bold transition-all flex flex-col items-center text-sm ${
                     selectedCategory === category.name
                       ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/50'
                       : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30'
                   }`}
                 >
-                  <span className="text-base">{category.name}</span>
+                  <span className="text-sm leading-tight">{category.name}</span>
                   {category.description && (
-                    <span className="text-xs font-normal mt-0.5 opacity-80">
+                    <span className="text-[10px] font-normal mt-0.5 opacity-80 leading-tight">
                       {category.description}
                     </span>
                   )}
