@@ -54,9 +54,6 @@ export default function MenuPage() {
     fetchData()
   }, [])
 
-  // Build category list
-  const categoryList = ['All', ...categories.map(cat => cat.name)]
-
   const filteredItems = menuItems.filter((item) => {
     const categoryName = item.category?.name || ''
     const matchesCategory = selectedCategory === 'All' || categoryName === selectedCategory
@@ -170,19 +167,39 @@ export default function MenuPage() {
 
             {/* Category Buttons */}
             <div className="flex flex-wrap gap-3">
-              {categoryList.map((category) => (
+              {/* All Categories Button */}
+              <motion.button
+                onClick={() => setSelectedCategory('All')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                  selectedCategory === 'All'
+                    ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/50'
+                    : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30'
+                }`}
+              >
+                All
+              </motion.button>
+              
+              {/* Individual Category Buttons with Descriptions */}
+              {categories.map((category) => (
                 <motion.button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.name)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`px-6 py-3 rounded-xl font-bold transition-all ${
-                    selectedCategory === category
+                  className={`px-6 py-3 rounded-xl font-bold transition-all flex flex-col items-center ${
+                    selectedCategory === category.name
                       ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/50'
                       : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30'
                   }`}
                 >
-                  {category}
+                  <span className="text-base">{category.name}</span>
+                  {category.description && (
+                    <span className="text-xs font-normal mt-0.5 opacity-80">
+                      {category.description}
+                    </span>
+                  )}
                 </motion.button>
               ))}
             </div>
