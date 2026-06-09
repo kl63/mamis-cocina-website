@@ -124,6 +124,10 @@ export default function AdminPage() {
   const [uploadingImage, setUploadingImage] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  
+  // Edit mode image states
+  const [editSelectedFile, setEditSelectedFile] = useState<File | null>(null)
+  const [editImagePreview, setEditImagePreview] = useState<string | null>(null)
 
   // Category modal states
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false)
@@ -254,6 +258,16 @@ export default function AdminPage() {
     if (!editingItem) return
 
     try {
+      setUploadingImage(true)
+      
+      // Upload image if file is selected
+      let imageUrl = editingItem.image_url
+      if (editSelectedFile) {
+        console.log('📷 Uploading selected image for edit...')
+        imageUrl = await uploadMenuItemImage(editSelectedFile)
+        console.log('✅ Image uploaded, URL:', imageUrl)
+      }
+      
       await updateMenuItem(editingItem.id, {
         name: editingItem.name,
         description: editingItem.description,
@@ -261,16 +275,20 @@ export default function AdminPage() {
         category_id: editingItem.category_id,
         calories: editingItem.calories,
         is_featured: editingItem.is_featured || editingItem.is_popular,
-        image_url: editingItem.image_url,
+        image_url: imageUrl,
       })
       
       // Reload data
       await loadData()
       setIsEditModalOpen(false)
       setEditingItem(null)
+      setEditSelectedFile(null)
+      setEditImagePreview(null)
     } catch (error) {
       console.error('Error updating item:', error)
       alert('Failed to update item')
+    } finally {
+      setUploadingImage(false)
     }
   }
 
@@ -282,6 +300,19 @@ export default function AdminPage() {
       const reader = new FileReader()
       reader.onloadend = () => {
         setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleEditFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setEditSelectedFile(file)
+      // Create preview
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setEditImagePreview(reader.result as string)
       }
       reader.readAsDataURL(file)
     }
@@ -1399,25 +1430,104 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="text-sm text-gray-400 mb-1 block">Image (emoji or URL)</label>
-                <input
-                  type="text"
-                  value={editingItem.image_url || ''}
-                  onChange={(e) => setEditingItem({ ...editingItem, image_url: e.target.value })}
-                  placeholder="🍔"
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
-                />
+                <label className="text-sm text-gray-400 mb-1 block">Image</label>
+                
+                {/* Image Preview */}
+                {(editImagePreview || (editingItem.image_url && (editingItem.image_url.startsWith('http') || editingItem.image_url.startsWith('/')))) && (
+                  <div className="mb-3 relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img 
+                      src={editImagePreview || editingItem.image_url} 
+                      alt="Preview" 
+                      className="w-32 h-32 object-cover rounded-lg border-2 border-orange-500/30"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditSelectedFile(null)
+                        setEditImagePreview(null)
+                        setEditingItem({ ...editingItem, image_url: '/mamis_cocina_logo.png' })
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+                
+                {/* Tabbed Upload Options */}
+                <div className="space-y-3">
+                  {/* Option 1: Upload File */}
+                  <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
+                    <label className="text-sm font-semibold text-white mb-2 block">📁 Upload from Computer</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleEditFileSelect}
+                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-orange-500 file:text-white hover:file:bg-orange-600"
+                    />
+                  </div>
+
+                  {/* Option 2: Image URL */}
+                  <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
+                    <label className="text-sm font-semibold text-white mb-2 block">🔗 Or use Image URL</label>
+                    <input
+                      type="url"
+                      value={editingItem.image_url?.startsWith('http') ? editingItem.image_url : ''}
+                      onChange={(e) => {
+                        setEditingItem({ ...editingItem, image_url: e.target.value })
+                        setEditSelectedFile(null)
+                        setEditImagePreview(null)
+                      }}
+                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                      placeholder="https://images.unsplash.com/photo-..."
+                    />
+                    <p className="text-xs text-gray-500 mt-1">💡 Paste URL from Unsplash, Pexels, or any image link</p>
+                  </div>
+
+                  {/* Option 3: Emoji */}
+                  <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
+                    <label className="text-sm font-semibold text-white mb-2 block">😊 Or use an Emoji</label>
+                    <input
+                      type="text"
+                      value={!editingItem.image_url?.startsWith('http') && !editingItem.image_url?.startsWith('/') ? editingItem.image_url : ''}
+                      onChange={(e) => {
+                        setEditingItem({ ...editingItem, image_url: e.target.value || '🍔' })
+                        setEditSelectedFile(null)
+                        setEditImagePreview(null)
+                      }}
+                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none text-center text-2xl"
+                      placeholder="🍔 🍟 🥤"
+                      maxLength={2}
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="is_popular"
-                  checked={editingItem.is_popular}
-                  onChange={(e) => setEditingItem({ ...editingItem, is_popular: e.target.checked })}
-                  className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
-                />
-                <label htmlFor="is_popular" className="text-sm text-gray-300">Mark as Popular</label>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_popular_edit"
+                    checked={editingItem.is_popular}
+                    onChange={(e) => setEditingItem({ ...editingItem, is_popular: e.target.checked })}
+                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
+                  />
+                  <label htmlFor="is_popular_edit" className="text-sm text-gray-300">Mark as Popular</label>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_spicy_edit"
+                    checked={editingItem.is_spicy || false}
+                    onChange={(e) => setEditingItem({ ...editingItem, is_spicy: e.target.checked })}
+                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
+                  />
+                  <label htmlFor="is_spicy_edit" className="text-sm text-gray-300 flex items-center gap-1">
+                    Mark as Spicy 🌶️
+                  </label>
+                </div>
               </div>
             </div>
 
