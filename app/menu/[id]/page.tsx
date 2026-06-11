@@ -46,7 +46,7 @@ export default function MenuItemPage() {
           const defaults: Record<string, string> = {}
           data.customization_options.forEach(option => {
             if (option.options.length > 0) {
-              defaults[option.name] = option.options[0]
+              defaults[option.name] = option.options[0].label
             }
           })
           setSelectedCustomizations(defaults)
@@ -559,26 +559,26 @@ export default function MenuItemPage() {
                       </h3>
                       <div className="grid grid-cols-2 gap-3">
                         {customOption.options.map((option) => {
-                          const extraCost = priceModifiers[option] || 0
-                          const extraCalories = calorieModifiers[option] || 0
+                          const extraCost = priceModifiers[option.label] || 0
+                          const extraCalories = calorieModifiers[option.label] || 0
                           
                           let isSelected = false
                           let handleClick = () => {}
                           
                           if (isToppings || isAddOns) {
-                            isSelected = selectedToppings.includes(option)
-                            handleClick = () => toggleTopping(option)
+                            isSelected = selectedToppings.includes(option.label)
+                            handleClick = () => toggleTopping(option.label)
                           } else if (isSauces) {
-                            isSelected = selectedSauces.includes(option)
-                            handleClick = () => toggleSauce(option)
+                            isSelected = selectedSauces.includes(option.label)
+                            handleClick = () => toggleSauce(option.label)
                           } else {
-                            isSelected = selectedCustomizations[customOption.name] === option
-                            handleClick = () => handleCustomizationChange(customOption.name, option)
+                            isSelected = selectedCustomizations[customOption.name] === option.label
+                            handleClick = () => handleCustomizationChange(customOption.name, option.label)
                           }
                           
                           return (
                             <button
-                              key={option}
+                              key={option.label}
                               onClick={handleClick}
                               className={`px-4 py-3 rounded-xl font-bold transition-all relative ${
                                 isSelected
@@ -587,7 +587,7 @@ export default function MenuItemPage() {
                               }`}
                             >
                               <div className="flex flex-col items-center gap-1">
-                                <span>{option}</span>
+                                <span>{option.label}</span>
                                 {extraCost > 0 && (
                                   <span className="text-xs text-orange-400 font-bold">+${extraCost.toFixed(2)}</span>
                                 )}
