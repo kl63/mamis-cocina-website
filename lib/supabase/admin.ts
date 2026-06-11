@@ -155,13 +155,16 @@ export async function getAllMenuItems() {
 
 export async function createMenuItem(item: {
   name: string
+  name_es?: string
   description: string
+  description_es?: string
   price: number
   category_id?: string
   image_url?: string
   is_popular?: boolean
   is_spicy?: boolean
   calories?: number
+  customization_options?: unknown
 }) {
   try {
     console.log('📝 Creating menu item:', item)
@@ -347,7 +350,9 @@ export async function getAllCategories() {
 
 export async function createCategory(category: {
   name: string
+  name_es?: string
   description?: string
+  description_es?: string
 }) {
   try {
     const headers = await getAuthHeaders()

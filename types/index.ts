@@ -12,7 +12,9 @@ export interface User {
 export interface MenuCategory {
   id: string
   name: string
+  name_es?: string // Spanish translation
   description?: string
+  description_es?: string // Spanish translation
   display_order: number
   is_active: boolean
   created_at: string
@@ -20,15 +22,24 @@ export interface MenuCategory {
 }
 
 export interface CustomizationOption {
-  name: string
-  options: string[]
+  name: string // e.g., "Protein Choices"
+  name_es?: string // e.g., "Opciones de Proteína"
+  options: CustomizationChoice[]
+}
+
+export interface CustomizationChoice {
+  label: string // e.g., "Chicken" or "Pollo / Chicken"
+  label_es?: string // e.g., "Pollo" (optional, for separate Spanish label)
+  price_modifier?: number // e.g., 1 for +$1, 0 for no change
 }
 
 export interface MenuItem {
   id: string
   category_id?: string
   name: string
+  name_es?: string // Spanish translation
   description?: string
+  description_es?: string // Spanish translation
   price: number
   image_url?: string
   calories?: number

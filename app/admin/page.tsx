@@ -39,7 +39,7 @@ import {
   getPeakHours,
 } from '@/lib/supabase/admin'
 import { uploadMenuItemImage } from '@/lib/supabase/storage'
-import type { MenuItem, MenuCategory } from '@/types'
+import type { MenuItem, MenuCategory, CustomizationOption } from '@/types'
 import { sendStatusUpdateEmail } from '@/lib/email/send-email'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { RestaurantHours } from '@/components/admin/RestaurantHours'
@@ -111,15 +111,30 @@ export default function AdminPage() {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-  const [newItem, setNewItem] = useState({
+  const [newItem, setNewItem] = useState<{
+    name: string
+    name_es?: string
+    description: string
+    description_es?: string
+    price: number
+    category_id: string
+    calories: number
+    is_popular: boolean
+    is_spicy: boolean
+    image_url: string
+    customization_options?: CustomizationOption[]
+  }>({
     name: '',
+    name_es: '',
     description: '',
+    description_es: '',
     price: 0,
     category_id: '',
     calories: 0,
     is_popular: false,
     is_spicy: false,
     image_url: '/mamis_cocina_logo.png',
+    customization_options: undefined,
   })
   const [uploadingImage, setUploadingImage] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -135,7 +150,9 @@ export default function AdminPage() {
   const [editingCategory, setEditingCategory] = useState<MenuCategory | null>(null)
   const [newCategory, setNewCategory] = useState({
     name: '',
+    name_es: '',
     description: '',
+    description_es: '',
   })
 
   // Analytics state
@@ -270,12 +287,15 @@ export default function AdminPage() {
       
       await updateMenuItem(editingItem.id, {
         name: editingItem.name,
+        name_es: editingItem.name_es,
         description: editingItem.description,
+        description_es: editingItem.description_es,
         price: editingItem.price,
         category_id: editingItem.category_id,
         calories: editingItem.calories,
         is_featured: editingItem.is_featured || editingItem.is_popular,
         image_url: imageUrl,
+        customization_options: editingItem.customization_options,
       })
       
       // Reload data
@@ -342,13 +362,16 @@ export default function AdminPage() {
       console.log('💾 Creating menu item in database...')
       await createMenuItem({
         name: newItem.name,
+        name_es: newItem.name_es,
         description: newItem.description,
+        description_es: newItem.description_es,
         price: newItem.price,
         category_id: newItem.category_id || undefined,
         calories: newItem.calories || undefined,
         is_popular: newItem.is_popular,
         is_spicy: newItem.is_spicy,
         image_url: imageUrl,
+        customization_options: newItem.customization_options,
       })
       
       console.log('✅ Menu item created successfully')
@@ -368,6 +391,7 @@ export default function AdminPage() {
         is_popular: false,
         is_spicy: false,
         image_url: '/mamis_cocina_logo.png',
+        customization_options: undefined,
       })
       setSelectedFile(null)
       setImagePreview(null)
@@ -395,7 +419,9 @@ export default function AdminPage() {
       console.log('💾 Creating category in database...')
       await createCategory({
         name: newCategory.name,
+        name_es: newCategory.name_es,
         description: newCategory.description,
+        description_es: newCategory.description_es,
       })
       
       console.log('✅ Category created successfully')
@@ -408,7 +434,9 @@ export default function AdminPage() {
       // Reset form
       setNewCategory({
         name: '',
+        name_es: '',
         description: '',
+        description_es: '',
       })
       
       console.log('🎉 Category added successfully!')
@@ -431,7 +459,9 @@ export default function AdminPage() {
     try {
       await updateCategory(editingCategory.id, {
         name: editingCategory.name,
+        name_es: editingCategory.name_es,
         description: editingCategory.description,
+        description_es: editingCategory.description_es,
       })
       
       console.log('✅ Category updated successfully')
@@ -868,14 +898,26 @@ export default function AdminPage() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-xl font-black text-white">{item.name}</h3>
+                              <h3 className="text-xl font-black text-white">
+                                {item.name}
+                                <span className="text-orange-400 font-normal ml-2">
+                                  {item.name_es || item.name}
+                                </span>
+                              </h3>
                               {item.is_popular && (
                                 <span className="text-xs bg-orange-500/20 text-orange-500 px-2 py-0.5 rounded-full font-bold border border-orange-500/30">
                                   Popular
                                 </span>
                               )}
                             </div>
-                            <p className="text-gray-400 text-sm mb-2">{item.description}</p>
+                            <p className="text-gray-400 text-sm mb-2">
+                              {item.description}
+                              {(item.description_es || item.description) && (
+                                <span className="text-orange-400/60 block mt-1">
+                                  {item.description_es || item.description}
+                                </span>
+                              )}
+                            </p>
                             <div className="flex items-center gap-4 text-sm">
                               <span className="text-orange-500 font-bold">${item.price.toFixed(2)}</span>
                               <span className="text-gray-500">
@@ -942,7 +984,12 @@ export default function AdminPage() {
                       className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 hover:border-orange-500/40 transition-all"
                     >
                       <div className="flex justify-between items-start mb-3">
-                        <h3 className="text-xl font-black text-white">{category.name}</h3>
+                        <h3 className="text-xl font-black text-white">
+                          {category.name}
+                          <span className="text-orange-400 font-normal ml-2">
+                            {category.name_es || category.name}
+                          </span>
+                        </h3>
                         <div className="flex gap-2">
                           <Button
                             onClick={() => {
@@ -965,8 +1012,15 @@ export default function AdminPage() {
                           </Button>
                         </div>
                       </div>
-                      {category.description && (
-                        <p className="text-gray-400 text-sm mb-3">{category.description}</p>
+                      {(category.description || category.description_es) && (
+                        <p className="text-gray-400 text-sm mb-3">
+                          {category.description}
+                          {(category.description_es || category.description) && (
+                            <span className="text-orange-400/60 block mt-1">
+                              {category.description_es || category.description}
+                            </span>
+                          )}
+                        </p>
                       )}
                       <div className="flex items-center gap-2 text-xs">
                         <span className="px-2 py-1 bg-orange-500/20 text-orange-500 rounded-full border border-orange-500/30">
@@ -1367,29 +1421,57 @@ export default function AdminPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 lg:p-8 max-w-2xl w-full my-8"
+            className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 lg:p-8 max-w-5xl w-full my-8"
           >
               <h2 className="text-2xl lg:text-3xl font-black text-white mb-6">Edit Menu Item</h2>
             
             <div className="space-y-4">
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Name</label>
-                <input
-                  type="text"
-                  value={editingItem.name}
-                  onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
-                />
+              {/* English Name & Spanish Name */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Name (English)</label>
+                  <input
+                    type="text"
+                    value={editingItem.name}
+                    onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    placeholder="e.g., Tacos"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Nombre (Español)</label>
+                  <input
+                    type="text"
+                    value={editingItem.name_es || ''}
+                    onChange={(e) => setEditingItem({ ...editingItem, name_es: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    placeholder="e.g., Tacos"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Description</label>
-                <textarea
-                  value={editingItem.description || ''}
-                  onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
-                  rows={3}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
-                />
+              {/* English Description & Spanish Description */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Description (English)</label>
+                  <textarea
+                    value={editingItem.description || ''}
+                    onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
+                    rows={3}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    placeholder="Describe the item in English"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Descripción (Español)</label>
+                  <textarea
+                    value={editingItem.description_es || ''}
+                    onChange={(e) => setEditingItem({ ...editingItem, description_es: e.target.value })}
+                    rows={3}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    placeholder="Describe el artículo en español"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -1427,6 +1509,33 @@ export default function AdminPage() {
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
                 </select>
+              </div>
+
+              {/* Checkboxes */}
+              <div className="flex gap-6">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_popular_edit"
+                    checked={editingItem.is_popular}
+                    onChange={(e) => setEditingItem({ ...editingItem, is_popular: e.target.checked })}
+                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
+                  />
+                  <label htmlFor="is_popular_edit" className="text-sm text-gray-300">Mark as Popular</label>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_spicy_edit"
+                    checked={editingItem.is_spicy || false}
+                    onChange={(e) => setEditingItem({ ...editingItem, is_spicy: e.target.checked })}
+                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
+                  />
+                  <label htmlFor="is_spicy_edit" className="text-sm text-gray-300 flex items-center gap-1">
+                    Mark as Spicy 🌶️
+                  </label>
+                </div>
               </div>
 
               <div>
@@ -1484,50 +1593,135 @@ export default function AdminPage() {
                     />
                     <p className="text-xs text-gray-500 mt-1">💡 Paste URL from Unsplash, Pexels, or any image link</p>
                   </div>
-
-                  {/* Option 3: Emoji */}
-                  <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                    <label className="text-sm font-semibold text-white mb-2 block">😊 Or use an Emoji</label>
-                    <input
-                      type="text"
-                      value={!editingItem.image_url?.startsWith('http') && !editingItem.image_url?.startsWith('/') ? editingItem.image_url : ''}
-                      onChange={(e) => {
-                        setEditingItem({ ...editingItem, image_url: e.target.value || '🍔' })
-                        setEditSelectedFile(null)
-                        setEditImagePreview(null)
-                      }}
-                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none text-center text-2xl"
-                      placeholder="🍔 🍟 🥤"
-                      maxLength={2}
-                    />
-                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="is_popular_edit"
-                    checked={editingItem.is_popular}
-                    onChange={(e) => setEditingItem({ ...editingItem, is_popular: e.target.checked })}
-                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
-                  />
-                  <label htmlFor="is_popular_edit" className="text-sm text-gray-300">Mark as Popular</label>
+              <div>
+                <label className="text-sm text-gray-400 mb-1 block">Customization Options (Optional)</label>
+                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700 space-y-4">
+                  {(editingItem.customization_options || []).map((option, optionIndex) => (
+                    <div key={optionIndex} className="bg-gray-900/50 rounded-lg p-3 border border-gray-600">
+                      {/* Group Name - Bilingual */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+                        <input
+                          type="text"
+                          value={option.name}
+                          onChange={(e) => {
+                            const updated = [...(editingItem.customization_options || [])]
+                            updated[optionIndex] = { ...updated[optionIndex], name: e.target.value }
+                            setEditingItem({ ...editingItem, customization_options: updated })
+                          }}
+                          placeholder="Group Name (English)"
+                          className="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white text-sm"
+                        />
+                        <input
+                          type="text"
+                          value={option.name_es || ''}
+                          onChange={(e) => {
+                            const updated = [...(editingItem.customization_options || [])]
+                            updated[optionIndex] = { ...updated[optionIndex], name_es: e.target.value }
+                            setEditingItem({ ...editingItem, customization_options: updated })
+                          }}
+                          placeholder="Nombre del Grupo (Español)"
+                          className="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white text-sm"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = (editingItem.customization_options || []).filter((_, i) => i !== optionIndex)
+                          setEditingItem({ ...editingItem, customization_options: updated.length > 0 ? updated : undefined })
+                        }}
+                        className="mb-3 px-3 py-1.5 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 text-xs"
+                      >
+                        Remove Group
+                      </button>
+                      
+                      <div className="space-y-2">
+                        {option.options.map((choice, choiceIndex) => (
+                          <div key={choiceIndex} className="space-y-1">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                              <input
+                                type="text"
+                                value={choice.label}
+                                onChange={(e) => {
+                                  const updated = [...(editingItem.customization_options || [])]
+                                  updated[optionIndex].options[choiceIndex] = { ...choice, label: e.target.value }
+                                  setEditingItem({ ...editingItem, customization_options: updated })
+                                }}
+                                placeholder="Label (English)"
+                                className="bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-white text-sm"
+                              />
+                              <input
+                                type="text"
+                                value={choice.label_es || ''}
+                                onChange={(e) => {
+                                  const updated = [...(editingItem.customization_options || [])]
+                                  updated[optionIndex].options[choiceIndex] = { ...choice, label_es: e.target.value }
+                                  setEditingItem({ ...editingItem, customization_options: updated })
+                                }}
+                                placeholder="Etiqueta (Español)"
+                                className="bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-white text-sm"
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1">
+                                <span className="text-gray-400 text-xs">Price +$</span>
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  min="0"
+                                  value={choice.price_modifier || 0}
+                                  onChange={(e) => {
+                                    const updated = [...(editingItem.customization_options || [])]
+                                    updated[optionIndex].options[choiceIndex] = { ...choice, price_modifier: parseFloat(e.target.value) || 0 }
+                                    setEditingItem({ ...editingItem, customization_options: updated })
+                                  }}
+                                  placeholder="0"
+                                  className="w-20 bg-gray-800 border border-gray-600 rounded px-2 py-1.5 text-white text-sm"
+                                />
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = [...(editingItem.customization_options || [])]
+                                  updated[optionIndex].options = updated[optionIndex].options.filter((_, i) => i !== choiceIndex)
+                                  setEditingItem({ ...editingItem, customization_options: updated })
+                                }}
+                                className="px-2 py-1.5 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 text-xs"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = [...(editingItem.customization_options || [])]
+                            updated[optionIndex].options.push({ label: '', price_modifier: 0 })
+                            setEditingItem({ ...editingItem, customization_options: updated })
+                          }}
+                          className="w-full px-3 py-1.5 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 text-sm"
+                        >
+                          + Add Choice
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updated = [...(editingItem.customization_options || []), { name: '', options: [{ label: '', price_modifier: 0 }] }]
+                      setEditingItem({ ...editingItem, customization_options: updated })
+                    }}
+                    className="w-full px-4 py-2 bg-orange-500/20 text-orange-400 rounded hover:bg-orange-500/30 border border-orange-500/30"
+                  >
+                    + Add Customization Group
+                  </button>
                 </div>
-                
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="is_spicy_edit"
-                    checked={editingItem.is_spicy || false}
-                    onChange={(e) => setEditingItem({ ...editingItem, is_spicy: e.target.checked })}
-                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
-                  />
-                  <label htmlFor="is_spicy_edit" className="text-sm text-gray-300 flex items-center gap-1">
-                    Mark as Spicy 🌶️
-                  </label>
-                </div>
+                <p className="text-xs text-gray-500 mt-1">💡 Add options like protein choices with price modifiers (e.g., +$1 for beef)</p>
               </div>
             </div>
 
@@ -1559,31 +1753,57 @@ export default function AdminPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 lg:p-8 max-w-2xl w-full my-8"
+            className="bg-gradient-to-br from-gray-800 to-black border-2 border-orange-500/20 rounded-2xl p-6 lg:p-8 max-w-5xl w-full my-8"
           >
               <h2 className="text-2xl lg:text-3xl font-black text-white mb-6">Add New Menu Item</h2>
             
             <div className="space-y-4">
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Name *</label>
-                <input
-                  type="text"
-                  value={newItem.name}
-                  onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
-                  placeholder="Classic Burger"
-                />
+              {/* English Name & Spanish Name */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Name (English) *</label>
+                  <input
+                    type="text"
+                    value={newItem.name}
+                    onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    placeholder="e.g., Tacos"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Nombre (Español)</label>
+                  <input
+                    type="text"
+                    value={newItem.name_es || ''}
+                    onChange={(e) => setNewItem({ ...newItem, name_es: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    placeholder="e.g., Tacos"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="text-sm text-gray-400 mb-1 block">Description</label>
-                <textarea
-                  value={newItem.description}
-                  onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
-                  rows={3}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
-                  placeholder="Delicious burger with fresh ingredients..."
-                />
+              {/* English Description & Spanish Description */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Description (English)</label>
+                  <textarea
+                    value={newItem.description}
+                    onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
+                    rows={3}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    placeholder="Describe the item in English"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Descripción (Español)</label>
+                  <textarea
+                    value={newItem.description_es || ''}
+                    onChange={(e) => setNewItem({ ...newItem, description_es: e.target.value })}
+                    rows={3}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    placeholder="Describe el artículo en español"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -1623,6 +1843,33 @@ export default function AdminPage() {
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
                 </select>
+              </div>
+
+              {/* Checkboxes */}
+              <div className="flex gap-6">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_popular_new"
+                    checked={newItem.is_popular}
+                    onChange={(e) => setNewItem({ ...newItem, is_popular: e.target.checked })}
+                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
+                  />
+                  <label htmlFor="is_popular_new" className="text-sm text-gray-300">Mark as Popular</label>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_spicy_new"
+                    checked={newItem.is_spicy || false}
+                    onChange={(e) => setNewItem({ ...newItem, is_spicy: e.target.checked })}
+                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
+                  />
+                  <label htmlFor="is_spicy_new" className="text-sm text-gray-300 flex items-center gap-1">
+                    Mark as Spicy 🌶️
+                  </label>
+                </div>
               </div>
 
               <div>
@@ -1680,50 +1927,135 @@ export default function AdminPage() {
                     />
                     <p className="text-xs text-gray-500 mt-1">💡 Paste URL from Unsplash, Pexels, or any image link</p>
                   </div>
-
-                  {/* Option 3: Emoji */}
-                  <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
-                    <label className="text-sm font-semibold text-white mb-2 block">😊 Or use an Emoji</label>
-                    <input
-                      type="text"
-                      value={!newItem.image_url.startsWith('http') && !newItem.image_url.startsWith('/') ? newItem.image_url : ''}
-                      onChange={(e) => {
-                        setNewItem({ ...newItem, image_url: e.target.value || '🍔' })
-                        setSelectedFile(null)
-                        setImagePreview(null)
-                      }}
-                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none text-center text-2xl"
-                      placeholder="🍔 🍟 🥤"
-                      maxLength={2}
-                    />
-                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="is_popular_new"
-                    checked={newItem.is_popular}
-                    onChange={(e) => setNewItem({ ...newItem, is_popular: e.target.checked })}
-                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
-                  />
-                  <label htmlFor="is_popular_new" className="text-sm text-gray-300">Mark as Popular</label>
+              <div>
+                <label className="text-sm text-gray-400 mb-1 block">Customization Options (Optional)</label>
+                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700 space-y-4">
+                  {(newItem.customization_options || []).map((option, optionIndex) => (
+                    <div key={optionIndex} className="bg-gray-900/50 rounded-lg p-3 border border-gray-600">
+                      {/* Group Name - Bilingual */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+                        <input
+                          type="text"
+                          value={option.name}
+                          onChange={(e) => {
+                            const updated = [...(newItem.customization_options || [])]
+                            updated[optionIndex] = { ...updated[optionIndex], name: e.target.value }
+                            setNewItem({ ...newItem, customization_options: updated })
+                          }}
+                          placeholder="Group Name (English)"
+                          className="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white text-sm"
+                        />
+                        <input
+                          type="text"
+                          value={option.name_es || ''}
+                          onChange={(e) => {
+                            const updated = [...(newItem.customization_options || [])]
+                            updated[optionIndex] = { ...updated[optionIndex], name_es: e.target.value }
+                            setNewItem({ ...newItem, customization_options: updated })
+                          }}
+                          placeholder="Nombre del Grupo (Español)"
+                          className="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white text-sm"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = (newItem.customization_options || []).filter((_, i) => i !== optionIndex)
+                          setNewItem({ ...newItem, customization_options: updated.length > 0 ? updated : undefined })
+                        }}
+                        className="mb-3 px-3 py-1.5 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 text-xs"
+                      >
+                        Remove Group
+                      </button>
+                      
+                      <div className="space-y-2">
+                        {option.options.map((choice, choiceIndex) => (
+                          <div key={choiceIndex} className="space-y-1">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                              <input
+                                type="text"
+                                value={choice.label}
+                                onChange={(e) => {
+                                  const updated = [...(newItem.customization_options || [])]
+                                  updated[optionIndex].options[choiceIndex] = { ...choice, label: e.target.value }
+                                  setNewItem({ ...newItem, customization_options: updated })
+                                }}
+                                placeholder="Label (English)"
+                                className="bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-white text-sm"
+                              />
+                              <input
+                                type="text"
+                                value={choice.label_es || ''}
+                                onChange={(e) => {
+                                  const updated = [...(newItem.customization_options || [])]
+                                  updated[optionIndex].options[choiceIndex] = { ...choice, label_es: e.target.value }
+                                  setNewItem({ ...newItem, customization_options: updated })
+                                }}
+                                placeholder="Etiqueta (Español)"
+                                className="bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-white text-sm"
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1">
+                                <span className="text-gray-400 text-xs">Price +$</span>
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  min="0"
+                                  value={choice.price_modifier || 0}
+                                  onChange={(e) => {
+                                    const updated = [...(newItem.customization_options || [])]
+                                    updated[optionIndex].options[choiceIndex] = { ...choice, price_modifier: parseFloat(e.target.value) || 0 }
+                                    setNewItem({ ...newItem, customization_options: updated })
+                                  }}
+                                  placeholder="0"
+                                  className="w-20 bg-gray-800 border border-gray-600 rounded px-2 py-1.5 text-white text-sm"
+                                />
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = [...(newItem.customization_options || [])]
+                                  updated[optionIndex].options = updated[optionIndex].options.filter((_, i) => i !== choiceIndex)
+                                  setNewItem({ ...newItem, customization_options: updated })
+                                }}
+                                className="px-2 py-1.5 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 text-xs"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = [...(newItem.customization_options || [])]
+                            updated[optionIndex].options.push({ label: '', price_modifier: 0 })
+                            setNewItem({ ...newItem, customization_options: updated })
+                          }}
+                          className="w-full px-3 py-1.5 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 text-sm"
+                        >
+                          + Add Choice
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updated = [...(newItem.customization_options || []), { name: '', options: [{ label: '', price_modifier: 0 }] }]
+                      setNewItem({ ...newItem, customization_options: updated })
+                    }}
+                    className="w-full px-4 py-2 bg-orange-500/20 text-orange-400 rounded hover:bg-orange-500/30 border border-orange-500/30"
+                  >
+                    + Add Customization Group
+                  </button>
                 </div>
-                
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="is_spicy_new"
-                    checked={newItem.is_spicy || false}
-                    onChange={(e) => setNewItem({ ...newItem, is_spicy: e.target.checked })}
-                    className="w-4 h-4 rounded border-gray-700 bg-gray-900 text-orange-500 focus:ring-orange-500"
-                  />
-                  <label htmlFor="is_spicy_new" className="text-sm text-gray-300 flex items-center gap-1">
-                    Mark as Spicy 🌶️
-                  </label>
-                </div>
+                <p className="text-xs text-gray-500 mt-1">💡 Add options like protein choices with price modifiers (e.g., +$1 for beef)</p>
               </div>
             </div>
 
@@ -1772,32 +2104,58 @@ export default function AdminPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-br from-gray-800 to-black border-2 border-blue-500/40 rounded-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto"
+            className="bg-gradient-to-br from-gray-800 to-black border-2 border-blue-500/40 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
           >
             <h3 className="text-2xl font-black text-white mb-6">Add New Category</h3>
             
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Category Name *</label>
-                <input
-                  type="text"
-                  value={newCategory.name}
-                  onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                  placeholder="e.g., Burgers, Drinks, Desserts"
-                  required
-                />
+              {/* English & Spanish Names */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Category Name (English) 🇺🇸 *</label>
+                  <input
+                    type="text"
+                    value={newCategory.name}
+                    onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+                    placeholder="e.g., Tacos"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Nombre (Español)</label>
+                  <input
+                    type="text"
+                    value={newCategory.name_es || ''}
+                    onChange={(e) => setNewCategory({ ...newCategory, name_es: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+                    placeholder="e.g., Tacos"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Description (Optional)</label>
-                <textarea
-                  value={newCategory.description}
-                  onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                  placeholder="Brief description of this category"
-                  rows={3}
-                />
+              {/* English & Spanish Descriptions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Description (English)</label>
+                  <textarea
+                    value={newCategory.description}
+                    onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+                    placeholder="Brief description in English"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Descripción (Español)</label>
+                  <textarea
+                    value={newCategory.description_es || ''}
+                    onChange={(e) => setNewCategory({ ...newCategory, description_es: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+                    placeholder="Breve descripción en español"
+                    rows={3}
+                  />
+                </div>
               </div>
             </div>
 
@@ -1813,7 +2171,9 @@ export default function AdminPage() {
                   setIsAddCategoryModalOpen(false)
                   setNewCategory({
                     name: '',
+                    name_es: '',
                     description: '',
+                    description_es: '',
                   })
                 }}
                 variant="outline"
@@ -1832,32 +2192,58 @@ export default function AdminPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-br from-gray-800 to-black border-2 border-blue-500/40 rounded-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto"
+            className="bg-gradient-to-br from-gray-800 to-black border-2 border-blue-500/40 rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto"
           >
             <h3 className="text-2xl font-black text-white mb-6">Edit Category</h3>
             
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Category Name *</label>
-                <input
-                  type="text"
-                  value={editingCategory.name}
-                  onChange={(e) => setEditingCategory({ ...editingCategory, name: e.target.value })}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                  placeholder="e.g., Burgers, Drinks, Desserts"
-                  required
-                />
+              {/* English & Spanish Names */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Category Name (English) 🇺🇸 *</label>
+                  <input
+                    type="text"
+                    value={editingCategory.name}
+                    onChange={(e) => setEditingCategory({ ...editingCategory, name: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+                    placeholder="e.g., Tacos"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Nombre (Español)</label>
+                  <input
+                    type="text"
+                    value={editingCategory.name_es || ''}
+                    onChange={(e) => setEditingCategory({ ...editingCategory, name_es: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+                    placeholder="e.g., Tacos"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Description (Optional)</label>
-                <textarea
-                  value={editingCategory.description || ''}
-                  onChange={(e) => setEditingCategory({ ...editingCategory, description: e.target.value })}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                  placeholder="Brief description of this category"
-                  rows={3}
-                />
+              {/* English & Spanish Descriptions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Description (English)</label>
+                  <textarea
+                    value={editingCategory.description || ''}
+                    onChange={(e) => setEditingCategory({ ...editingCategory, description: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+                    placeholder="Brief description in English"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Descripción (Español)</label>
+                  <textarea
+                    value={editingCategory.description_es || ''}
+                    onChange={(e) => setEditingCategory({ ...editingCategory, description_es: e.target.value })}
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+                    placeholder="Breve descripción en español"
+                    rows={3}
+                  />
+                </div>
               </div>
             </div>
 

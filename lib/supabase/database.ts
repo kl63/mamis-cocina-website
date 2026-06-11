@@ -42,7 +42,7 @@ export async function getCategoryById(id: string) {
 // Menu Items
 export async function getMenuItems() {
   // Try direct REST API call instead of Supabase client
-  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/menu_items?select=*`
+  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/menu_items?select=*,category:category_id(*)`
   const headers = {
     'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`

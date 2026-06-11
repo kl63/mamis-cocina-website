@@ -6,16 +6,7 @@ import { motion } from 'framer-motion'
 import { getMenuItems, getCategories } from '@/lib/supabase/database'
 import type { MenuItem, MenuCategory } from '@/types'
 
-// Emoji mapping for categories (temporary until we have real images)
-const categoryEmojis: Record<string, string> = {
-  'Burgers': '🍔',
-  'Sides': '�',
-  'Drinks': '🥤',
-  'Desserts': '🍰',
-}
-
 export default function MenuPage() {
-  const [selectedCategory, setSelectedCategory] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [categories, setCategories] = useState<MenuCategory[]>([])
@@ -54,14 +45,39 @@ export default function MenuPage() {
     fetchData()
   }, [])
 
-  const filteredItems = menuItems.filter((item) => {
-    const categoryName = item.category?.name || ''
-    const matchesCategory = selectedCategory === 'All' || categoryName === selectedCategory
-    const matchesSearch =
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.description?.toLowerCase() || '').includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
+  // Filter items by search only
+  const searchFilteredItems = menuItems.filter((item) => {
+    if (!searchQuery) return true
+    
+    const searchLower = searchQuery.toLowerCase()
+    return (
+      item.name.toLowerCase().includes(searchLower) ||
+      (item.description?.toLowerCase() || '').includes(searchLower) ||
+      (item.customization_options || []).some(option => 
+        option.name.toLowerCase().includes(searchLower) ||
+        option.options.some(choice => choice.label.toLowerCase().includes(searchLower))
+      )
+    )
   })
+
+  // Group items by category
+  const itemsByCategory = categories.map(category => ({
+    category,
+    items: searchFilteredItems.filter(item => item.category?.name === category.name)
+  })).filter(group => group.items.length > 0)
+
+  // Scroll to category section
+  const scrollToCategory = (categoryName: string) => {
+    const element = document.getElementById(`category-${categoryName}`)
+    if (element) {
+      const offset = 100 // Offset for fixed header
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+      window.scrollTo({
+        top: elementPosition - offset,
+        behavior: 'smooth'
+      })
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -165,41 +181,20 @@ export default function MenuPage() {
               />
             </div>
 
-            {/* Category Buttons */}
+            {/* Category Buttons - Scroll to sections */}
             <div className="flex flex-wrap gap-3">
-              {/* All Categories Button */}
-              <motion.button
-                onClick={() => setSelectedCategory('All')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-4 py-2 rounded-lg font-bold transition-all text-sm ${
-                  selectedCategory === 'All'
-                    ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/50'
-                    : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30'
-                }`}
-              >
-                All
-              </motion.button>
-              
-              {/* Individual Category Buttons with Descriptions */}
               {categories.map((category) => (
                 <motion.button
                   key={category.id}
-                  onClick={() => setSelectedCategory(category.name)}
+                  onClick={() => scrollToCategory(category.name)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`px-4 py-2 rounded-lg font-bold transition-all flex flex-col items-center text-sm ${
-                    selectedCategory === category.name
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/50'
-                      : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30'
-                  }`}
+                  className="px-4 py-2 rounded-lg font-bold transition-all text-sm bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/30"
                 >
-                  <span className="text-sm leading-tight">{category.name}</span>
-                  {category.description && (
-                    <span className="text-[10px] font-normal mt-0.5 opacity-80 leading-tight">
-                      {category.description}
-                    </span>
-                  )}
+                  <span className="text-white">{category.name}</span>
+                  <span className="text-orange-400 ml-2">
+                    {category.name_es || category.name}
+                  </span>
                 </motion.button>
               ))}
             </div>
@@ -210,83 +205,157 @@ export default function MenuPage() {
               <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-orange-500"></div>
               <p className="text-xl text-gray-400 mt-4">Loading menu...</p>
             </div>
-          ) : filteredItems.length === 0 ? (
+          ) : itemsByCategory.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-xl text-gray-400">No items found matching your search</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
-              {filteredItems.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  whileHover={{ x: 8, transition: { duration: 0.3 } }}
-                  className="group relative"
+            <div className="flex flex-col gap-12">
+              {/* Category Sections */}
+              {itemsByCategory.map((group, groupIndex) => (
+                <motion.section
+                  key={group.category.id}
+                  id={`category-${group.category.name}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: groupIndex * 0.1 }}
+                  className="scroll-mt-24"
                 >
-                    <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-xl overflow-hidden hover:border-orange-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 flex flex-row items-center">
-                    {/* Popular Badge */}
-                    {item.is_popular && (
-                      <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10 shadow-lg flex items-center gap-1">
-                        <Star className="w-3 h-3 fill-current" />
-                        Popular
-                      </div>
+                  {/* Category Header */}
+                  <div className="mb-6">
+                    <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                      {group.category.name}
+                      <span className="text-orange-400 font-normal ml-2">
+                        {group.category.name_es || group.category.name}
+                      </span>
+                    </h2>
+                    {(group.category.description || group.category.description_es) && (
+                      <p className="text-lg text-gray-400 italic">
+                        {group.category.description}
+                        {group.category.description_es && group.category.description_es !== group.category.description && (
+                          <span className="text-orange-400/70 ml-2">{group.category.description_es}</span>
+                        )}
+                      </p>
                     )}
-                    
-                    {/* Image Area */}
-                    <div className="relative w-32 h-32 flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
-                      {item.image_url ? (
-                        <motion.img
-                          whileHover={{ scale: 1.1 }}
-                          transition={{ duration: 0.4 }}
-                          src={item.image_url.includes('unsplash.com') 
-                            ? `${item.image_url.split('?')[0]}?w=300&q=80&auto=format`
-                            : item.image_url
-                          }
-                          alt={item.name}
-                          loading="lazy"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <motion.div
-                          whileHover={{ scale: 1.2, rotate: 5 }}
-                          transition={{ duration: 0.4 }}
-                          className="text-5xl filter drop-shadow-2xl"
-                        >
-                          {categoryEmojis[item.category?.name || 'Tacos'] || '🌮'}
-                        </motion.div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/40" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 p-4 flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-xl font-black text-white">{item.name}</h3>
-                          {item.is_spicy && (
-                            <motion.span
-                              animate={{ opacity: [0.5, 1, 0.5] }}
-                              transition={{ duration: 2, repeat: Infinity }}
-                              className="text-xl"
-                              title="Spicy"
-                            >
-                              🌶️
-                            </motion.span>
-                          )}
-                        </div>
-                        <p className="text-gray-400 text-sm line-clamp-2">{item.description}</p>
-                      </div>
-                      
-                      <div className="flex items-center ml-4">
-                        <span className="text-2xl font-black text-orange-500">
-                          ${item.price.toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
+                    <div className="h-1 w-24 bg-gradient-to-r from-orange-500 to-red-600 rounded-full mt-3"></div>
                   </div>
-                </motion.div>
+
+                  {/* Items in this category */}
+                  <div className="flex flex-col gap-4">
+                    {group.items.map((item, index) => (
+                      <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.05 }}
+                        whileHover={{ x: 8, transition: { duration: 0.3 } }}
+                        className="group relative"
+                      >
+                        <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-xl overflow-hidden hover:border-orange-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 flex flex-row items-center">
+                          {/* Popular Badge */}
+                          {item.is_popular && (
+                            <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10 shadow-lg flex items-center gap-1">
+                              <Star className="w-3 h-3 fill-current" />
+                              Popular
+                            </div>
+                          )}
+                          
+                          {/* Image Area */}
+                          <div className="relative w-32 h-32 flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
+                            {item.image_url && (
+                              <motion.img
+                                whileHover={{ scale: 1.1 }}
+                                transition={{ duration: 0.4 }}
+                                src={item.image_url.includes('unsplash.com') 
+                                  ? `${item.image_url.split('?')[0]}?w=300&q=80&auto=format`
+                                  : item.image_url
+                                }
+                                alt={item.name}
+                                loading="lazy"
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/40" />
+                          </div>
+
+                          {/* Content */}
+                          <div className="flex-1 p-4 flex items-center justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h3 className="text-xl font-black text-white">
+                                  {item.name}
+                                  <span className="text-orange-400 font-normal ml-2">
+                                    {item.name_es || item.name}
+                                  </span>
+                                </h3>
+                                {item.is_spicy && (
+                                  <motion.span
+                                    animate={{ opacity: [0.5, 1, 0.5] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                    className="text-xl"
+                                    title="Spicy"
+                                  >
+                                    🌶️
+                                  </motion.span>
+                                )}
+                              </div>
+                              <p className="text-gray-400 text-sm line-clamp-3">
+                                {item.description}
+                                {(item.description_es || item.description) && (
+                                  <span className="text-orange-400/60 block mt-1">
+                                    {item.description_es || item.description}
+                                  </span>
+                                )}
+                              </p>
+                              
+                              {/* Customization Options */}
+                              {item.customization_options && item.customization_options.length > 0 && (
+                                <div className="mt-3 pt-3 border-t border-gray-700">
+                                  {item.customization_options.map((option, idx) => (
+                                    <div key={idx} className="mb-2">
+                                      <div className="text-xs font-bold text-orange-400 mb-1">
+                                        {option.name}
+                                        <span className="text-orange-300 font-normal ml-1">
+                                          {option.name_es || option.name}
+                                        </span>
+                                      </div>
+                                      <div className="flex flex-wrap gap-2">
+                                        {option.options
+                                          .sort((a, b) => (a.price_modifier ?? 0) - (b.price_modifier ?? 0))
+                                          .map((choice, choiceIdx) => (
+                                          <span 
+                                            key={choiceIdx}
+                                            className="inline-flex items-center px-2 py-1 bg-gray-800/50 rounded text-xs text-gray-300 border border-gray-700"
+                                          >
+                                            <span>
+                                              {choice.label}
+                                              <span className="text-orange-400/70 ml-1">
+                                                {choice.label_es || choice.label}
+                                              </span>
+                                            </span>
+                                            {(choice.price_modifier ?? 0) > 0 && (
+                                              <span className="ml-1 text-orange-400 font-semibold">+${choice.price_modifier}</span>
+                                            )}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="flex items-center ml-4">
+                              <span className="text-2xl font-black text-orange-500">
+                                ${item.price.toFixed(2)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.section>
               ))}
             </div>
           )}
