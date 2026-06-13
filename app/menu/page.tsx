@@ -162,9 +162,9 @@ export default function MenuPage() {
             className="flex flex-col gap-6 mb-12"
           >
             {/* Spicy Note */}
-            <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border-2 border-red-500/30 rounded-xl p-4 flex items-center gap-3">
-              <span className="text-3xl">🌶️</span>
-              <p className="text-sm text-gray-300">
+            <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border-2 border-red-500/30 rounded-xl p-3 md:p-4 flex items-center gap-2 md:gap-3">
+              <span className="text-2xl md:text-3xl flex-shrink-0">🌶️</span>
+              <p className="text-xs md:text-sm text-gray-300">
                 <span className="font-bold text-white">Spicy Items:</span> Look for the chili pepper 🌶️ next to menu items that pack some heat!
               </p>
             </div>
@@ -189,7 +189,7 @@ export default function MenuPage() {
                   onClick={() => scrollToCategory(category.name)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 py-2 rounded-lg font-bold transition-all text-sm bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/30"
+                  className="px-3 md:px-4 py-2 rounded-lg font-bold transition-all text-xs md:text-sm bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border-2 border-gray-700 hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/30"
                 >
                   <span className="text-white">{category.name}</span>
                   <span className="text-orange-400 ml-2">
@@ -223,7 +223,7 @@ export default function MenuPage() {
                 >
                   {/* Category Header */}
                   <div className="mb-6">
-                    <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white mb-2">
                       {group.category.name}
                       <span className="text-orange-400 font-normal ml-2">
                         {group.category.name_es || group.category.name}
@@ -251,7 +251,7 @@ export default function MenuPage() {
                         whileHover={{ x: 8, transition: { duration: 0.3 } }}
                         className="group relative"
                       >
-                        <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-xl overflow-hidden hover:border-orange-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 flex flex-row items-center">
+                        <div className="bg-gradient-to-br from-gray-800 via-gray-900 to-black border-2 border-orange-500/20 rounded-xl overflow-hidden hover:border-orange-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 flex flex-col sm:flex-row items-stretch sm:items-center">
                           {/* Popular Badge */}
                           {item.is_popular && (
                             <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10 shadow-lg flex items-center gap-1">
@@ -261,7 +261,7 @@ export default function MenuPage() {
                           )}
                           
                           {/* Image Area */}
-                          <div className="relative w-32 h-32 flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
+                          <div className="relative w-full sm:w-32 h-48 sm:h-32 flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
                             {item.image_url && (
                               <motion.img
                                 whileHover={{ scale: 1.1 }}
@@ -279,10 +279,10 @@ export default function MenuPage() {
                           </div>
 
                           {/* Content */}
-                          <div className="flex-1 p-4 flex items-center justify-between">
+                          <div className="flex-1 p-3 md:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
                             <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h3 className="text-xl font-black text-white">
+                              <div className="flex flex-wrap items-center gap-2 mb-1">
+                                <h3 className="text-lg md:text-xl font-black text-white">
                                   {item.name}
                                   <span className="text-orange-400 font-normal ml-2">
                                     {item.name_es || item.name}
@@ -345,8 +345,8 @@ export default function MenuPage() {
                               )}
                             </div>
                             
-                            <div className="flex items-center ml-4">
-                              <span className="text-2xl font-black text-orange-500">
+                            <div className="flex items-center sm:ml-4 w-full sm:w-auto justify-end sm:justify-start">
+                              <span className="text-xl md:text-2xl font-black text-orange-500">
                                 ${item.price.toFixed(2)}
                               </span>
                             </div>

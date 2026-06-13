@@ -44,6 +44,8 @@ export default function Home() {
         
         // Fetch popular items
         const items = await getPopularMenuItems()
+        console.log('🌟 Popular items fetched:', items.length)
+        console.log('🌟 Items:', items.map(i => ({ name: i.name, is_featured: i.is_featured, is_popular: i.is_popular })))
         setPopularItems(items.slice(0, 3)) // Show only 3 items
 
         // Only fetch hours if cache is empty or expired

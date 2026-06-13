@@ -169,11 +169,8 @@ export async function createMenuItem(item: {
   try {
     console.log('📝 Creating menu item:', item)
     
-    // Map is_popular to is_featured for database compatibility
-    const { is_popular, ...rest } = item
     const dbItem = {
-      ...rest,
-      is_featured: is_popular || false,
+      ...item,
       is_available: true // Set as available by default
     }
     

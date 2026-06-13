@@ -32,7 +32,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${poppins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
         <AuthProvider>
           <CartProvider>
             <Navbar />

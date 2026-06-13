@@ -293,7 +293,8 @@ export default function AdminPage() {
         price: editingItem.price,
         category_id: editingItem.category_id,
         calories: editingItem.calories,
-        is_featured: editingItem.is_featured || editingItem.is_popular,
+        is_popular: editingItem.is_popular,
+        is_spicy: editingItem.is_spicy,
         image_url: imageUrl,
         customization_options: editingItem.customization_options,
       })
@@ -1083,33 +1084,42 @@ export default function AdminPage() {
                   <input
                     type="file"
                     accept=".pdf"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0]
                       if (file) {
                         if (file.type !== 'application/pdf') {
                           alert('Please upload a PDF file')
                           return
                         }
-                        // Handle file upload
-                        const formData = new FormData()
-                        formData.append('file', file)
                         
-                        fetch('/api/upload-menu-pdf', {
-                          method: 'POST',
-                          body: formData
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                          if (data.success) {
-                            alert('Menu PDF uploaded successfully!')
-                          } else {
-                            alert('Error uploading PDF: ' + (data.error || 'Unknown error'))
+                        console.log('📤 Uploading PDF directly to Supabase Storage...')
+                        console.log('File size:', (file.size / 1024 / 1024).toFixed(2), 'MB')
+                        
+                        try {
+                          // Create Supabase client
+                          const { createClient } = await import('@/lib/supabase/client')
+                          const supabase = createClient()
+                          
+                          // Upload directly to Supabase Storage (bypasses Next.js 10MB limit)
+                          const { error: uploadError } = await supabase.storage
+                            .from('menu-pdfs')
+                            .upload('menu.pdf', file, {
+                              contentType: 'application/pdf',
+                              upsert: true
+                            })
+
+                          if (uploadError) {
+                            console.error('Supabase upload error:', uploadError)
+                            alert('Error uploading PDF: ' + uploadError.message)
+                            return
                           }
-                        })
-                        .catch(err => {
+
+                          console.log('✅ PDF uploaded successfully!')
+                          alert('Menu PDF uploaded successfully!')
+                        } catch (err) {
                           console.error('Upload error:', err)
                           alert('Error uploading PDF')
-                        })
+                        }
                       }
                     }}
                     className="hidden"
